@@ -109,6 +109,7 @@ npx github:@apollosolutions/federation-2-readiness --config supergraph.yaml
 
 ## Known Limitations
 
-- Publish only as source code to Github. Not available on NPM.
+- Published only as source code to Github. Not available on NPM.
+- Query plan diffing is naive and susceptible to false negatives due to field ordering in selection sets.
 - The versions of Fed 1 and Fed 2 composition may not match what's running in Apollo Studio or Rover.
 - I haven't written any tests!
