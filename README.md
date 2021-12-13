@@ -10,7 +10,7 @@ Check your federated schema for backward-compatibility with [Federation 2](https
 
 ```sh
 export APOLLO_KEY=<your apollo api key>
-npx @apollosolutions/federation-2-readiness
+npx github:@apollosolutions/federation-2-readiness
 # follow prompts to select a graph, a variant, and a time window for operations
 ```
 
@@ -32,7 +32,7 @@ Operations that match: 9
 
 ```sh
 export APOLLO_KEY=<your apollo api key>
-npx @apollosolutions/federation-2-readiness --out results
+npx github:@apollosolutions/federation-2-readiness --out results
 # follow prompts to select a graph, a variant, a time window for operations
 ```
 
@@ -98,16 +98,17 @@ If you encounter a composition error, you can run the audit against local subgra
 3. Run the audit command using the local supergraph config instead of Studio.
 
 ```sh
-npx @apollosolutions/federation-2-readiness config init --out supergraph.yaml
+npx github:@apollosolutions/federation-2-readiness config init --out supergraph.yaml
 # follow prompts to select the graph and variant
 
-npx @apollosolutions/federation-2-readiness config extract --out subgraphs
+npx github:@apollosolutions/federation-2-readiness config extract --out subgraphs
 # follow prompts to select the subgraphs to extract to local files
 
-npx @apollosolutions/federation-2-readiness --config supergraph.yaml
+npx github:@apollosolutions/federation-2-readiness --config supergraph.yaml
 ```
 
 ## Known Limitations
 
+- Publish only as source code to Github. Not available on NPM.
 - The versions of Fed 1 and Fed 2 composition may not match what's running in Apollo Studio or Rover.
 - I haven't written any tests!
