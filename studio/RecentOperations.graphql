@@ -1,0 +1,20 @@
+query RecentOperations(
+  $serviceId: ID!
+  $from: Timestamp!
+  $variantName: String!
+) {
+  service(id: $serviceId) {
+    statsWindow(from: $from) {
+      queryStats(filter: { schemaTag: $variantName }) {
+        groupBy {
+          queryId
+          queryName
+          querySignature
+        }
+        metrics {
+          totalRequestCount
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+query ListAvailableVariants($serviceId: ID!) {
+  service(id: $serviceId) {
+    variants {
+      id
+      name
+    }
+  }
+}

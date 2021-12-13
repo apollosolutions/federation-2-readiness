@@ -1,0 +1,13 @@
+query ListSubgraphs($id: ID!, $graphVariant: String!) {
+  service(id: $id) {
+    implementingServices(graphVariant: $graphVariant) {
+      __typename
+      ... on FederatedImplementingServices {
+        services {
+          name
+          url
+        }
+      }
+    }
+  }
+}

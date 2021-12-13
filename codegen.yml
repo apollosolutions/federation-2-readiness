@@ -1,0 +1,9 @@
+overwrite: true
+schema: https://graphql.api.apollographql.com/api/graphql
+documents: studio/**/*.graphql
+generates:
+  studio/generated/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typed-document-node

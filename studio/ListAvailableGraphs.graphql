@@ -1,0 +1,13 @@
+query ListAvailableGraphs {
+  me {
+    ... on User {
+      memberships {
+        account {
+          services {
+            id
+          }
+        }
+      }
+    }
+  }
+}

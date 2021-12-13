@@ -1,0 +1,7 @@
+query ListAvailableGraphsForAccount($accountId: ID!) {
+  account(id: $accountId) {
+    services {
+      id
+    }
+  }
+}
