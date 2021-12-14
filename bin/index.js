@@ -7,11 +7,11 @@ import {
   ExtractSubgraphCommand,
 } from '../src/index.js';
 
-const [node, app, ...args] = process.argv;
+const [_, __, ...args] = process.argv;
 
 const cli = new Cli({
   binaryLabel: 'Federation 2 Readiness',
-  binaryName: `${node} ${app}`,
+  binaryName: `npx github:@apollosolutions/federation-2-readiness`,
   binaryVersion: '1.0.0',
 });
 

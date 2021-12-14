@@ -101,7 +101,7 @@ If you encounter a composition error, you can run the audit against local subgra
 npx github:@apollosolutions/federation-2-readiness config init --out supergraph.yaml
 # follow prompts to select the graph and variant
 
-npx github:@apollosolutions/federation-2-readiness config extract --out subgraphs
+npx github:@apollosolutions/federation-2-readiness config extract --config supergraph.yaml --out subgraphs
 # follow prompts to select the subgraphs to extract to local files
 
 npx github:@apollosolutions/federation-2-readiness --config supergraph.yaml
