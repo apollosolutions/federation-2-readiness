@@ -46,7 +46,7 @@ export default class ConfigCommand extends Command {
     const yaml = dump(config);
 
     if (this.out) {
-      mkdir(dirname(this.out), { recursive: true });
+      await mkdir(dirname(this.out), { recursive: true });
       await writeFile(this.out, yaml, 'utf-8');
     } else {
       this.context.stdout.write(yaml);
