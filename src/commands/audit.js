@@ -10,6 +10,7 @@ import inquirer from 'inquirer';
 import { queryPlanAudit } from '../federation/query-plan-audit.js';
 import { parse, print } from 'graphql';
 import { diff } from 'jest-diff';
+import { serializeQueryPlan } from '@apollo/query-planner';
 
 const FROM_OPTIONS = {
   'Last Hour': `${-60 * 60}`,
@@ -60,7 +61,7 @@ async function getOperations(client, graphRef, from) {
 
 /**
  * @param {any} op
- * @returns {op is Operation}
+ * @returns {op is import('../typings.js').Operation}
  */
 function validateOperation(op) {
   return (
@@ -187,9 +188,19 @@ export default class AuditCommand extends Command {
   }
 }
 
+const noColor = (/** @type {any} */ _) => _;
+
+const COLORS = {
+  aColor: noColor,
+  bColor: noColor,
+  changeColor: noColor,
+  commonColor: noColor,
+  patchColor: noColor,
+};
+
 /**
  *
- * @param {AuditResult} result
+ * @param {import('../typings.js').AuditResult} result
  * @param {string} graphRef
  * @returns {string}
  */
@@ -198,31 +209,31 @@ function generateReport(result, graphRef) {
     return '';
   }
 
-  const noColor = (/** @type {any} */ _) => _;
-
-  const options = {
-    aColor: noColor,
-    bColor: noColor,
-    changeColor: noColor,
-    commonColor: noColor,
-    patchColor: noColor,
-  };
+  if (result.type === 'FAILURE') {
+    return 'Query planning failed';
+  }
 
   const title = `${result.queryName} ${result.queryId?.slice(0, 6)}`;
   const [graph, variant] = graphRef.split('@');
+
   return [
     title,
     '='.repeat(title.length),
     `https://studio.apollographql.com/graph/${graph}/operations?query=${result.queryId}&queryName=${result.queryName}&variant=${variant}`,
     '',
-    result.type === 'SUCCESS' && result.one === result.two
+    result.queryPlansMatch
       ? '🎉 No difference in query plans'
       : '💣 Query plans differ',
     '',
     'Diff',
     '----',
+    'Diff after query plan normalization (field sorting, etc.)',
     '```diff',
-    result.type === 'SUCCESS' ? diff(result.one, result.two, options) : '',
+    diff(
+      serializeQueryPlan(result.normalizedOne),
+      serializeQueryPlan(result.normalizedTwo),
+      COLORS,
+    ),
     '```',
     '',
     'Operation',
@@ -230,16 +241,17 @@ function generateReport(result, graphRef) {
     '```graphql',
     print(parse(result.querySignature || '')),
     '```',
+    '',
     'Federation 1 Query Plan',
     '-----------------------',
     '```',
-    result.type === 'SUCCESS' ? result.one : '',
+    serializeQueryPlan(result.one),
     '```',
     '',
     'Federation 2 Query Plan',
     '-----------------------',
     '```',
-    result.type === 'SUCCESS' ? result.two : '',
+    serializeQueryPlan(result.two),
     '```',
   ].join('\n');
 }

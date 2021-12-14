@@ -3,11 +3,10 @@ import {
   buildSchema,
   federationBuiltIns,
   operationFromDocument,
-  printSchema,
   Subgraph,
   Subgraphs,
 } from '@apollo/federation-internals';
-import { QueryPlanner, serializeQueryPlan } from '@apollo/query-planner';
+import { QueryPlanner } from '@apollo/query-planner';
 import { GraphQLError, parse } from 'graphql';
 
 /**
@@ -66,6 +65,5 @@ export async function queryPlan(schema, operationDoc, operationName) {
   const documentNode = parse(operationDoc);
   const operation = operationFromDocument(schema, documentNode, operationName);
   const queryPlanner = new QueryPlanner(schema);
-  const plan = queryPlanner.buildQueryPlan(operation);
-  return serializeQueryPlan(plan);
+  return queryPlanner.buildQueryPlan(operation);
 }

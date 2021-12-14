@@ -3,7 +3,6 @@ import {
   buildComposedSchema,
   buildOperationContext,
   QueryPlanner,
-  serializeQueryPlan,
 } from '@apollo/query-planner-1';
 import { parse } from 'graphql';
 
@@ -54,8 +53,7 @@ export async function queryPlan(schema, operationDoc, operationName) {
     operationName,
   );
   const queryPlanner = new QueryPlanner(schema);
-  const queryPlan = queryPlanner.buildQueryPlan(operationContext, {
+  return queryPlanner.buildQueryPlan(operationContext, {
     autoFragmentization: false,
   });
-  return serializeQueryPlan(queryPlan);
 }

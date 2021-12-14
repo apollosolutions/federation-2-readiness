@@ -13,7 +13,8 @@
   "scripts": {
     "codegen": "graphql-codegen --config codegen.yml",
     "codegen:compile": "tsc -p studio",
-    "codegen:watch": "concurrently \"yarn codegen --watch\" \"yarn codegen:compile --watch\""
+    "codegen:watch": "concurrently \"yarn codegen --watch\" \"yarn codegen:compile --watch\"",
+    "test": "node --experimental-vm-modules $(yarn bin)/jest src"
   },
   "dependencies": {
     "@apollo/composition": "^2.0.0-alpha.2",
