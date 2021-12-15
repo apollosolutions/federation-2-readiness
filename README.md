@@ -18,14 +18,11 @@ Example output:
 
 ```sh
 ? Select Graph mygraph
-Fetching subgraphs for mygraph@current...
-Composing...
 🎉 Composed successfully
-Fetching operations...
-? Audit Operations in the ... Last Day
+? Audit Operations in the Last Day
 -----------------------------------
-Operations audited: 9
-Operations that match: 9
+✅ Operations audited: 9
+🏆 Operations that match: 9
 ```
 
 ### Generate Query Plan Reports
@@ -110,6 +107,6 @@ npx github:@apollosolutions/federation-2-readiness --config supergraph.yaml
 ## Known Limitations
 
 - Published only as source code to Github. Not available on NPM.
-- Query plan diffing is naive and susceptible to false negatives due to field ordering in selection sets.
 - The versions of Fed 1 and Fed 2 composition may not match what's running in Apollo Studio or Rover.
-- I haven't written any tests!
+- Known query plan serialization differences include:
+  - List arguments being serialized as `""` in Federation 1 and `[""]` in Federation 2.

@@ -5,6 +5,8 @@ import inquirer from 'inquirer';
 import { parse, print, printError } from 'graphql';
 import { diff } from 'jest-diff';
 import { serializeQueryPlan } from '@apollo/query-planner';
+import ora from 'ora';
+import parseDuration from 'parse-duration';
 import { getConfig, resolveConfig } from '../config/index.js';
 import { RecentOperationsDocument } from '../studio/graphql.js';
 import { composeWithResolvedConfig as composeWithResolvedConfig1 } from '../federation/one.js';
@@ -13,10 +15,10 @@ import { getClient } from '../studio/index.js';
 import { queryPlanAudit } from '../federation/query-plan-audit.js';
 
 const FROM_OPTIONS = {
-  'Last Hour': `${-60 * 60}`,
-  'Last Day': `${-60 * 60 * 24}`,
-  'Last Week': `${-60 * 60 * 24 * 7}`,
-  'Last Month': `${-60 * 60 * 24 * 30}`,
+  'Last Hour': '1h',
+  'Last Day': '1d',
+  'Last Week': '1w',
+  'Last Month': '1m',
 };
 
 /**
@@ -32,7 +34,7 @@ async function getOperations(client, graphRef, from) {
       .prompt({
         type: 'list',
         name: 'key',
-        message: 'Audit Operations in the ...',
+        message: 'Audit Operations in the',
         choices: Object.keys(FROM_OPTIONS),
       })
       .then(
@@ -40,14 +42,22 @@ async function getOperations(client, graphRef, from) {
       );
   }
 
+  const fromNumber = fromValue ? parseDuration(fromValue, 's') * -1 : undefined;
+
+  const spinner = ora();
+  spinner.text = 'Fetching operations';
+  spinner.start();
+
   const [serviceId, variantName] = graphRef.split('@');
   const { data, error } = await client
     .query(RecentOperationsDocument, {
       serviceId,
       variantName,
-      from: fromValue,
+      from: `${fromNumber}`,
     })
     .toPromise();
+
+  spinner.stop();
 
   if (error) {
     throw error;
@@ -160,17 +170,36 @@ export default class AuditCommand extends Command {
 
   accountId = Option.String('--account', { required: false });
 
-  config = Option.String('--config', { required: false });
+  config = Option.String('--config', {
+    required: false,
+    description: 'Optional. Specify a supergraph YAML config on disk.',
+  });
 
-  from = Option.String('--from', { required: false });
+  from = Option.String('--from', {
+    required: false,
+    description:
+      'Optional. Audit operations in a time window. Accepts durations like 1h, 5d, 3w.',
+  });
 
-  graphRef = Option.String('--graphref', { required: false });
+  graphRef = Option.String('--graphref', {
+    required: false,
+    description:
+      'Optional. Specify a graph and variant. Example: mygraph@current',
+  });
 
-  key = Option.String('--key', { required: false });
+  key = Option.String('--key', {
+    required: false,
+    description:
+      'Specify an API key. Prefer setting an APOLLO_KEY environment variable.',
+  });
 
-  out = Option.String('--out', { required: false });
+  out = Option.String('--out', {
+    required: false,
+    description: 'Optional. Path to a directory to store audit results.',
+  });
 
   async execute() {
+    const spinner = ora();
     const client = await getClient(this.key, {
       useSudo: this.accountId != null,
     });
@@ -182,16 +211,20 @@ export default class AuditCommand extends Command {
       this.accountId,
     );
 
-    this.context.stdout.write(
-      `Fetching subgraphs for ${config.experimental_fed2readiness.graph_ref}...\n`,
-    );
+    spinner.text = `Fetching subgraphs for ${config.experimental_fed2readiness.graph_ref}`;
+    spinner.start();
 
     const resolvedConfig = await resolveConfig(client, config);
 
-    this.context.stdout.write('Composing...\n');
+    spinner.stop();
+
+    spinner.text = 'Composing';
+    spinner.start();
 
     const fed1 = await composeWithResolvedConfig1(resolvedConfig);
     const fed2 = await composeWithResolvedConfig2(resolvedConfig);
+
+    spinner.stop();
 
     if (!fed1.schema) {
       this.context.stdout.write(
@@ -213,7 +246,6 @@ export default class AuditCommand extends Command {
 
     this.context.stdout.write('🎉 Composed successfully\n');
 
-    this.context.stdout.write('Fetching operations...\n');
     const operations = await getOperations(
       client,
       config.experimental_fed2readiness.graph_ref,
@@ -222,21 +254,34 @@ export default class AuditCommand extends Command {
 
     const validOperations = operations.filter(validateOperation);
 
+    spinner.text = `Generating query plans for ${validOperations.length} operations`;
+    spinner.start();
+
     const results = await queryPlanAudit({
       fed1Schema: fed1.schema,
       fed2Schema: fed2.schema,
       operations: validOperations,
     });
 
+    spinner.stop();
+
+    const total = validOperations.length;
+    const matched = results.filter(
+      (r) => r.type === 'SUCCESS' && r.queryPlansMatch,
+    ).length;
+
     this.context.stdout.write('-----------------------------------\n');
-    this.context.stdout.write(
-      `Operations audited: ${validOperations.length}\n`,
-    );
-    this.context.stdout.write(
-      `Operations that match: ${
-        results.filter((r) => r.type === 'SUCCESS' && r.queryPlansMatch).length
-      }\n`,
-    );
+    this.context.stdout.write(`✅ Operations audited: ${total}\n`);
+    this.context.stdout.write(`🏆 Operations that match: ${matched}\n`);
+
+    if (matched < total) {
+      this.context.stdout.write(
+        `❌ Operations with differences: ${total - matched}\n`,
+      );
+      this.context.stdout.write(
+        '\nAdd --out <directory> to print reports for each operation.\n',
+      );
+    }
 
     if (this.out) {
       await mkdir(this.out, { recursive: true });
