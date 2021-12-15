@@ -1,3 +1,7 @@
+import { readFile } from 'fs/promises';
+import { load } from 'js-yaml';
+import inquirer from 'inquirer';
+import fuzzy from 'fuzzy';
 import {
   GetSubgraphSdlsDocument,
   ListAvailableGraphsDocument,
@@ -5,10 +9,6 @@ import {
   ListAvailableVariantsDocument,
   ListSubgraphsDocument,
 } from '../studio/graphql.js';
-import { readFile } from 'fs/promises';
-import { load } from 'js-yaml';
-import inquirer from 'inquirer';
-import fuzzy from 'fuzzy';
 
 /**
  * @param {import("@urql/core").Client} client

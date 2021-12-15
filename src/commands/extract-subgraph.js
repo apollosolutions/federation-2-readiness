@@ -1,11 +1,11 @@
 import { Command, Option } from 'clipanion';
-import { readConfig } from '../config/index.js';
-import { getClient } from '../studio/index.js';
 import { mkdir, writeFile } from 'fs/promises';
 import { dirname, join } from 'path';
 import { dump } from 'js-yaml';
-import { GetSubgraphSdlsDocument } from '../studio/graphql.js';
 import inquirer from 'inquirer';
+import { GetSubgraphSdlsDocument } from '../studio/graphql.js';
+import { getClient } from '../studio/index.js';
+import { readConfig } from '../config/index.js';
 
 /**
  * @param {import("@urql/core").Client} client
@@ -102,7 +102,7 @@ export default class ExtractSubgraphCommand extends Command {
 
     const subgraphsOfInterest = Object.fromEntries(
       Object.entries(config.subgraphs).filter(
-        ([_, subgraph]) => !('file' in subgraph.schema),
+        ([, subgraph]) => !('file' in subgraph.schema),
       ),
     );
 
@@ -117,7 +117,7 @@ export default class ExtractSubgraphCommand extends Command {
       })
       .then((r) => r.key);
     if (!selected) {
-      return;
+      return 0;
     }
 
     const subgraphSdls = await getSubgraphSdls(client, graphRef);
@@ -127,17 +127,21 @@ export default class ExtractSubgraphCommand extends Command {
       .map((s) => [s.name, s.activePartialSchema.sdl]);
 
     if (!sdls.length) {
-      return;
+      this.context.stdout.write('No subgraphs selected\n');
+      return 0;
     }
 
     for (const [name, sdl] of sdls) {
       const path = join(this.out, `${name}.graphql`);
+      // eslint-disable-next-line no-await-in-loop
       await mkdir(dirname(path), { recursive: true });
+      // eslint-disable-next-line no-await-in-loop
       await writeFile(path, sdl);
 
       config.subgraphs[name].schema = { file: path };
     }
 
     await writeFile(this.config, dump(config), 'utf-8');
+    return 0;
   }
 }

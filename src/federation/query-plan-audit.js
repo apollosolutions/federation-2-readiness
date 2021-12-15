@@ -1,7 +1,5 @@
-import { Schema } from '@apollo/federation-internals';
-import { GraphQLSchema } from 'graphql';
-import { queryPlan as queryPlan_1 } from './one.js';
-import { queryPlan as queryPlan_2 } from './two.js';
+import { queryPlan as queryPlan1 } from './one.js';
+import { queryPlan as queryPlan2 } from './two.js';
 import { diffQueryPlans, normalizeQueryPlan } from './diff.js';
 
 /**
@@ -10,7 +8,7 @@ import { diffQueryPlans, normalizeQueryPlan } from './diff.js';
  */
 
 /**
- * @param {{ fed1Schema: GraphQLSchema; fed2Schema: Schema; operations: Operation[] }} options
+ * @param {{ fed1Schema: import("graphql").GraphQLSchema; fed2Schema: import("@apollo/federation-internals").Schema; operations: Operation[] }} options
  * @returns {Promise<AuditResult[]>}
  */
 export async function queryPlanAudit({ fed1Schema, fed2Schema, operations }) {
@@ -18,8 +16,8 @@ export async function queryPlanAudit({ fed1Schema, fed2Schema, operations }) {
     operations.map(async (op) => {
       try {
         const [one, two] = await Promise.all([
-          queryPlan_1(fed1Schema, op.querySignature, op.queryName),
-          queryPlan_2(fed2Schema, op.querySignature, op.queryName),
+          queryPlan1(fed1Schema, op.querySignature, op.queryName),
+          queryPlan2(fed2Schema, op.querySignature, op.queryName),
         ]);
 
         const normalizedOne = normalizeQueryPlan(one);

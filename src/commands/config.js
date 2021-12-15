@@ -1,9 +1,9 @@
 import { Command, Option } from 'clipanion';
-import { getConfig } from '../config/index.js';
-import { getClient } from '../studio/index.js';
 import { mkdir, writeFile } from 'fs/promises';
 import { dirname } from 'path';
 import { dump } from 'js-yaml';
+import { getClient } from '../studio/index.js';
+import { getConfig } from '../config/index.js';
 
 export default class ConfigCommand extends Command {
   static paths = [['config', 'init']];

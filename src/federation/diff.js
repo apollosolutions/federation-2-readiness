@@ -1,5 +1,5 @@
-import { serializeQueryPlan as serializeQueryPlan_1 } from '@apollo/query-planner-1';
-import { serializeQueryPlan as serializeQueryPlan_2 } from '@apollo/query-planner';
+import { serializeQueryPlan as serializeQueryPlan1 } from '@apollo/query-planner-1';
+import { serializeQueryPlan as serializeQueryPlan2 } from '@apollo/query-planner';
 import { parse, print, visit } from 'graphql';
 import { diffLinesRaw } from 'jest-diff';
 
@@ -16,8 +16,8 @@ import { diffLinesRaw } from 'jest-diff';
  * @returns
  */
 export function diffQueryPlans(one, two) {
-  const oneString = serializeQueryPlan_1(one);
-  const twoString = serializeQueryPlan_2(two);
+  const oneString = serializeQueryPlan1(one);
+  const twoString = serializeQueryPlan2(two);
 
   const diffs = diffLinesRaw(oneString.split('\n'), twoString.split('\n'));
   const lines = diffs.length;
@@ -28,23 +28,6 @@ export function diffQueryPlans(one, two) {
     differences,
     diffs,
   };
-}
-
-/**
- * @param {import("@apollo/query-planner").QueryPlan} plan
- */
-export function normalizeQueryPlan(plan) {
-  return visitQueryPlan(plan, {
-    Fetch(node) {
-      return {
-        ...node,
-        operation: sortFieldsInOperation(node.operation),
-        requires: node.requires
-          ? sortRequiresSelections(node.requires)
-          : undefined,
-      };
-    },
-  });
 }
 
 /**
@@ -60,15 +43,13 @@ function visitQueryPlan(plan, visitor) {
     const newNode = { ...node };
     switch (newNode?.kind) {
       case 'Fetch':
-        {
-          if (visitor.Fetch) {
-            const result = visitor.Fetch(newNode);
-            if (result !== undefined) {
-              newNode.operation = result.operation;
-              newNode.requires = result.requires;
-              newNode.serviceName = result.serviceName;
-              newNode.variableUsages = result.variableUsages;
-            }
+        if (visitor.Fetch) {
+          const result = visitor.Fetch(newNode);
+          if (result !== undefined) {
+            newNode.operation = result.operation;
+            newNode.requires = result.requires;
+            newNode.serviceName = result.serviceName;
+            newNode.variableUsages = result.variableUsages;
           }
         }
 
@@ -103,6 +84,9 @@ function visitQueryPlan(plan, visitor) {
         }
 
         newNode.nodes = newNode.nodes.map((child) => recurse(child));
+        break;
+      default:
+        throw new Error('invalid node kind');
     }
 
     return newNode;
@@ -143,10 +127,10 @@ function sortFieldsInOperation(operation) {
 
 /**
  * Returns new arrays of new nodes
- * @param {QueryPlanSelectionNode[]} nodes
+ * @param {QueryPlanSelectionNode[]} allNodes
  * @returns {QueryPlanSelectionNode[]}
  */
-function sortRequiresSelections(nodes) {
+function sortRequiresSelections(allNodes) {
   /**
    * @param {QueryPlanSelectionNode[]} nodes
    */
@@ -171,12 +155,30 @@ function sortRequiresSelections(nodes) {
     return newNodes.sort((a, b) => {
       if (a.kind === 'InlineFragment') {
         return -1;
-      } else if (a.kind === 'Field' && b.kind === 'Field') {
+      }
+      if (a.kind === 'Field' && b.kind === 'Field') {
         return (a.alias ?? a.name).localeCompare(b.alias ?? b.name);
       }
       return 0;
     });
   }
 
-  return recurse(nodes);
+  return recurse(allNodes);
+}
+
+/**
+ * @param {import("@apollo/query-planner").QueryPlan} plan
+ */
+export function normalizeQueryPlan(plan) {
+  return visitQueryPlan(plan, {
+    Fetch(node) {
+      return {
+        ...node,
+        operation: sortFieldsInOperation(node.operation),
+        requires: node.requires
+          ? sortRequiresSelections(node.requires)
+          : undefined,
+      };
+    },
+  });
 }

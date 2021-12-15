@@ -33,7 +33,6 @@ export async function composeWithResolvedConfig(config) {
 
       subgraphs.add(subgraph);
     } catch (e) {
-      console.log(e);
       throw new Error(`failed to build schema for ${name} subgraph`);
     }
   }
@@ -41,7 +40,6 @@ export async function composeWithResolvedConfig(config) {
   try {
     return compose(subgraphs);
   } catch (e) {
-    debugger;
     if (e instanceof Error) {
       return {
         errors: [new GraphQLError(e.message)],

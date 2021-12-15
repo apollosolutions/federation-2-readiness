@@ -11,5 +11,6 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true
-  }
+  },
+  "exclude": ["studio", "src/studio/graphql.js"]
 }

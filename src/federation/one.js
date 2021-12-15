@@ -19,13 +19,11 @@ import { parse } from 'graphql';
  */
 export async function composeWithResolvedConfig(config) {
   const serviceList = Object.entries(config.subgraphs).map(
-    ([name, subgraph]) => {
-      return {
-        name,
-        url: subgraph.url ?? undefined,
-        typeDefs: parse(subgraph.schema),
-      };
-    },
+    ([name, subgraph]) => ({
+      name,
+      url: subgraph.url ?? undefined,
+      typeDefs: parse(subgraph.schema),
+    }),
   );
 
   const result = composeAndValidate(serviceList);
@@ -35,9 +33,8 @@ export async function composeWithResolvedConfig(config) {
       schema: buildComposedSchema(parse(result.supergraphSdl)),
       supergraphSdl: result.supergraphSdl,
     };
-  } else {
-    return result;
   }
+  return result;
 }
 
 /**
