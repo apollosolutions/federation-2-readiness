@@ -7,7 +7,12 @@ import { diff } from 'jest-diff';
 import { serializeQueryPlan } from '@apollo/query-planner';
 import ora from 'ora';
 import parseDuration from 'parse-duration';
-import { getConfig, resolveConfig } from '../config/index.js';
+import {
+  chooseVariant,
+  getConfig,
+  getVariants,
+  resolveConfig,
+} from '../config/index.js';
 import { RecentOperationsDocument } from '../studio/graphql.js';
 import { composeWithResolvedConfig as composeWithResolvedConfig1 } from '../federation/one.js';
 import { composeWithResolvedConfig as composeWithResolvedConfig2 } from '../federation/two.js';
@@ -27,6 +32,25 @@ const FROM_OPTIONS = {
  * @param {string | undefined} from
  */
 async function getOperations(client, graphRef, from) {
+  let selectedGraphRef = graphRef;
+
+  const [graph] = selectedGraphRef.split('@');
+
+  const variants = await getVariants(client, graph);
+  if (variants.length > 1) {
+    const useSameGraphRef = await inquirer
+      .prompt({
+        type: 'confirm',
+        name: 'key',
+        message: `Use the same graphRef? ${graphRef}`,
+      })
+      .then((r) => r.key);
+
+    if (!useSameGraphRef) {
+      selectedGraphRef = await chooseVariant(client, graph);
+    }
+  }
+
   let fromValue = from;
 
   if (!fromValue) {
@@ -48,7 +72,7 @@ async function getOperations(client, graphRef, from) {
   spinner.text = 'Fetching operations';
   spinner.start();
 
-  const [serviceId, variantName] = graphRef.split('@');
+  const [serviceId, variantName] = selectedGraphRef.split('@');
   const { data, error } = await client
     .query(RecentOperationsDocument, {
       serviceId,

@@ -182,7 +182,7 @@ async function getGraphs(client, accountId) {
  * @param {import("@urql/core").Client} client
  * @param {string} graph
  */
-async function getVariants(client, graph) {
+export async function getVariants(client, graph) {
   const { data, error } = await client
     .query(ListAvailableVariantsDocument, { serviceId: graph })
     .toPromise();
@@ -192,6 +192,36 @@ async function getVariants(client, graph) {
   }
 
   return data?.service?.variants?.map((v) => v.name) ?? [];
+}
+
+/**
+ * @param {import("@urql/core").Client} client
+ * @param {string} graph
+ */
+export async function chooseVariant(client, graph) {
+  const variants = await getVariants(client, graph);
+
+  const variant = await (async () => {
+    if (variants.length === 1) {
+      return variants[0];
+    }
+    return inquirer
+      .prompt({
+        // @ts-ignore
+        type: 'autocomplete',
+        name: 'key',
+        message: 'Select Variant',
+        // @ts-ignore
+        source: (_, input) =>
+          fuzzy
+            .filter(input ?? '', variants)
+            .sort((a, b) => (a.score > b.score ? 1 : -1))
+            .map((v) => v.original),
+      })
+      .then((r) => r.key);
+  })();
+
+  return `${graph}@${variant}`;
 }
 
 /**
@@ -221,29 +251,7 @@ async function chooseGraphRef(client, accountId) {
       .then((r) => r.key);
   })();
 
-  const variants = await getVariants(client, graph);
-
-  const variant = await (async () => {
-    if (variants.length === 1) {
-      return variants[0];
-    }
-    return inquirer
-      .prompt({
-        // @ts-ignore
-        type: 'autocomplete',
-        name: 'key',
-        message: 'Select Variant',
-        // @ts-ignore
-        source: (_, input) =>
-          fuzzy
-            .filter(input ?? '', variants)
-            .sort((a, b) => (a.score > b.score ? 1 : -1))
-            .map((v) => v.original),
-      })
-      .then((r) => r.key);
-  })();
-
-  return `${graph}@${variant}`;
+  return chooseVariant(client, graph);
 }
 
 /**
