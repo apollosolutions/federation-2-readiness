@@ -812,13 +812,13 @@
   resolved "https://registry.npmjs.org/@gar/promisify/-/promisify-1.1.2.tgz"
   integrity sha512-82cpyJyKRoQoRi+14ibCeGPu0CwypgtBAdBhq1WfvagpCZNKqwXbKwXllYSMG91DhmG4jt9gN8eP6lGOtozuaw==
 
-"@graphql-codegen/cli@^2.3.0":
-  version "2.3.0"
-  resolved "https://registry.npmjs.org/@graphql-codegen/cli/-/cli-2.3.0.tgz"
-  integrity sha512-5pgrcnBFeOJbDGfZwhnytwMqpwFDrmdaAgD6HYywT9Fggsrx2yWSkVrxoAjEcbDMFLhxzjxECwfJYklm967AKA==
+"@graphql-codegen/cli@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/cli/-/cli-2.3.1.tgz#66083293b60e3182603d70031210d59e6f1a16e5"
+  integrity sha512-xMSvYqFtnRXOp/sVJSyqiFTm70X8ouLXiq5o/R/D3yQtA6NNudAC+Q4oxg9/LZKnRDL6pehwdC8CNnQk0Tf7Sw==
   dependencies:
-    "@graphql-codegen/core" "2.3.0"
-    "@graphql-codegen/plugin-helpers" "^2.3.0"
+    "@graphql-codegen/core" "2.4.0"
+    "@graphql-codegen/plugin-helpers" "^2.3.2"
     "@graphql-tools/apollo-engine-loader" "^7.0.5"
     "@graphql-tools/code-file-loader" "^7.0.6"
     "@graphql-tools/git-loader" "^7.0.5"
@@ -841,7 +841,7 @@
     glob "^7.1.6"
     globby "^11.0.4"
     graphql-config "^4.1.0"
-    inquirer "^7.3.3"
+    inquirer "^8.0.0"
     is-glob "^4.0.1"
     json-to-pretty-yaml "^1.2.2"
     latest-version "5.1.0"
@@ -858,17 +858,17 @@
     yaml "^1.10.0"
     yargs "^17.0.0"
 
-"@graphql-codegen/core@2.3.0":
-  version "2.3.0"
-  resolved "https://registry.npmjs.org/@graphql-codegen/core/-/core-2.3.0.tgz"
-  integrity sha512-dGBd5DEOB1hJ3Ddd6l+3U4cbDZ91e0BIJQGTyZPLRYyffqJP+Y7IEYm4lMaBNY9m6qVXeGq+fgCS2SXlXEzJoA==
+"@graphql-codegen/core@2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/core/-/core-2.4.0.tgz#d94dcc088b5e117c847ce5b10c4fe1eb7325e180"
+  integrity sha512-5RiYE1+07jayp/3w/bkyaCXtfKNeKmRabpPP4aRi369WeH2cH37l2K8NbhkIU+zhpnhoqMID61TO56x2fKldZQ==
   dependencies:
-    "@graphql-codegen/plugin-helpers" "^2.3.0"
+    "@graphql-codegen/plugin-helpers" "^2.3.2"
     "@graphql-tools/schema" "^8.1.2"
     "@graphql-tools/utils" "^8.1.1"
     tslib "~2.3.0"
 
-"@graphql-codegen/plugin-helpers@^2.3.0", "@graphql-codegen/plugin-helpers@^2.3.2":
+"@graphql-codegen/plugin-helpers@^2.3.2":
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/plugin-helpers/-/plugin-helpers-2.3.2.tgz#3f9ba625791901d19be733db1dfc9a3dbd0dac44"
   integrity sha512-19qFA5XMAWaAY64sBljjDPYfHjE+QMk/+oalCyY13WjSlcLDvYPfmFlCNgFSsydArDELlHR8T1GMbA7C42M8TA==
@@ -3799,26 +3799,7 @@ inquirer-autocomplete-prompt@^1.4.0:
     run-async "^2.4.0"
     rxjs "^6.6.2"
 
-inquirer@^7.3.3:
-  version "7.3.3"
-  resolved "https://registry.npmjs.org/inquirer/-/inquirer-7.3.3.tgz"
-  integrity sha512-JG3eIAj5V9CwcGvuOmoo6LB9kbAYT8HXffUl6memuszlwDC/qvFAJw49XJ5NROSFNPxp3iQg1GqkFhaY/CR0IA==
-  dependencies:
-    ansi-escapes "^4.2.1"
-    chalk "^4.1.0"
-    cli-cursor "^3.1.0"
-    cli-width "^3.0.0"
-    external-editor "^3.0.3"
-    figures "^3.0.0"
-    lodash "^4.17.19"
-    mute-stream "0.0.8"
-    run-async "^2.4.0"
-    rxjs "^6.6.0"
-    string-width "^4.1.0"
-    strip-ansi "^6.0.0"
-    through "^2.3.6"
-
-inquirer@^8.2.0:
+inquirer@^8.0.0, inquirer@^8.2.0:
   version "8.2.0"
   resolved "https://registry.npmjs.org/inquirer/-/inquirer-8.2.0.tgz"
   integrity sha512-0crLweprevJ02tTuA6ThpoAERAGyVILC4sS74uib58Xf/zSr1/ZWtmm7D5CI+bSQEaA04f0K7idaHpQbSWgiVQ==
@@ -4928,7 +4909,7 @@ lodash.xorby@^4.7.0:
   resolved "https://registry.yarnpkg.com/lodash.xorby/-/lodash.xorby-4.7.0.tgz#9c19a6f9f063a6eb53dd03c1b6871799801463d7"
   integrity sha1-nBmm+fBjputT3QPBtocXmYAUY9c=
 
-lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.7.0, lodash@~4.17.0:
+lodash@^4.17.20, lodash@^4.17.21, lodash@^4.7.0, lodash@~4.17.0:
   version "4.17.21"
   resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -5921,7 +5902,7 @@ run-parallel@^1.1.9:
   dependencies:
     queue-microtask "^1.2.2"
 
-rxjs@^6.3.3, rxjs@^6.6.0, rxjs@^6.6.2, rxjs@^6.6.3:
+rxjs@^6.3.3, rxjs@^6.6.2, rxjs@^6.6.3:
   version "6.6.7"
   resolved "https://registry.npmjs.org/rxjs/-/rxjs-6.6.7.tgz"
   integrity sha512-hTdwr+7yYNIT5n4AMYp85KA6yw2Va0FLa3Rguvbpa4W3I5xynaBZo41cM3XM+4Q6fRMj3sBYIR1VAmZMXYJvRQ==
