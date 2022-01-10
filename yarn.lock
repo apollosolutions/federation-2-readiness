@@ -25,10 +25,10 @@
     apollo-server-types "^3.0.2"
     lodash.xorby "^4.7.0"
 
-"@apollo/federation-internals@^2.0.0-alpha.2":
-  version "2.0.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/@apollo/federation-internals/-/federation-internals-2.0.0-alpha.2.tgz#35261e3ea3ac277a500ef0851dbbe376a70880ec"
-  integrity sha512-b2t9/HyBJ84CL1r467G7L6SlXRew7KK37GntZMng4Gnu2bhNxEWtzZNA2Vt1iV48NWHJgbY92ngyhJZaicO3HA==
+"@apollo/federation-internals@^2.0.0-alpha.2", "@apollo/federation-internals@^2.0.0-alpha.3":
+  version "2.0.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@apollo/federation-internals/-/federation-internals-2.0.0-alpha.3.tgz#e8123b849d5d7d7faedab038059b8474a277c815"
+  integrity sha512-3eCgjOf8ummyvW8S+/t4a4jg2ft6pvt8dfrzy5w1VUPwbPsQWtQsMI0QGzBrqPdy+RVULO838mwd5eORCm17Mw==
   dependencies:
     "@apollo/core-schema" "^0.2.0"
     chalk "^4.1.0"
@@ -53,12 +53,12 @@
     "@types/node" "^10.1.0"
     long "^4.0.0"
 
-"@apollo/query-graphs@^2.0.0-alpha.2":
-  version "2.0.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/@apollo/query-graphs/-/query-graphs-2.0.0-alpha.2.tgz#2d5a75b30cbdea8935f1f84a5da98f4dfc9f5cdf"
-  integrity sha512-MqLFxoy4YUTc6VU2a0EMcByebErzWJcXvYdxmub7O0/DrXN/9H8cKeXQDaN186X7dBK6W5SjhxeXdHXHG+WsPA==
+"@apollo/query-graphs@^2.0.0-alpha.2", "@apollo/query-graphs@^2.0.0-alpha.3":
+  version "2.0.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@apollo/query-graphs/-/query-graphs-2.0.0-alpha.3.tgz#d44cfe6f5bbeda116004f7a164c4814fe60ae56c"
+  integrity sha512-laOSNeZfs2L4ebzLqGbRgcw66Sh1TU2PV7gfsRSaDNlPjQLa++eioW9IvxCfLSV+W9eTq5UIo8kJu8k7QR6VIw==
   dependencies:
-    "@apollo/federation-internals" "^2.0.0-alpha.2"
+    "@apollo/federation-internals" "^2.0.0-alpha.3"
     ts-graphviz "^0.16.0"
 
 "@apollo/query-planner-1@npm:@apollo/query-planner@0.6.1":
@@ -71,13 +71,13 @@
     deep-equal "^2.0.5"
     pretty-format "^26.0.0"
 
-"@apollo/query-planner@^2.0.0-alpha.2":
-  version "2.0.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/@apollo/query-planner/-/query-planner-2.0.0-alpha.2.tgz#07e606ddc2a308dadbff087a6bd0bc74d4403c89"
-  integrity sha512-V8/3DrBEdCy9bMpw9pILBpMfdubpkf4IyTfcuspBTbyTcYSFHx7dEnVF4TUr76xd6/CCP22K0tzrLozySAsxug==
+"@apollo/query-planner@^2.0.0-alpha.3":
+  version "2.0.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@apollo/query-planner/-/query-planner-2.0.0-alpha.3.tgz#db4689f3bcb086b5d2ba30e0f8fcb587ba81c57f"
+  integrity sha512-1DjuuiRxbtthfr3VPQWpouAOg0NmNrBQ+nAjfbmqOCIJGcw8EwDM/bWFdQ+j7rLAve/UYNhvXqGT41nYptfJvA==
   dependencies:
-    "@apollo/federation-internals" "^2.0.0-alpha.2"
-    "@apollo/query-graphs" "^2.0.0-alpha.2"
+    "@apollo/federation-internals" "^2.0.0-alpha.3"
+    "@apollo/query-graphs" "^2.0.0-alpha.3"
     apollo-graphql "^0.9.5"
     chalk "^4.1.0"
     deep-equal "^2.0.5"
