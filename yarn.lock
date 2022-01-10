@@ -2,13 +2,13 @@
 # yarn lockfile v1
 
 
-"@apollo/composition@^2.0.0-alpha.2":
-  version "2.0.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/@apollo/composition/-/composition-2.0.0-alpha.2.tgz#a4cef62f1f385b5261c512542987eb698e97eeca"
-  integrity sha512-tHTs+rtIijT0w3S4nEUMYaf81hkC6id7N4Zmon+vRE0yjMkXwhI3YWforODYxNTZ927ighnGCmkxfVx0FHu4Gg==
+"@apollo/composition@^2.0.0-alpha.3":
+  version "2.0.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@apollo/composition/-/composition-2.0.0-alpha.3.tgz#a279cdd5fc5247091690f027d33a9ad93702569d"
+  integrity sha512-dIxOIwHnJUc8kAbvQ64aNx4GoY4uoITZLGXdUkKNOjoIg4ryqw1Gs9GG6v/rybERJOxpX3rMQLqMs+mNLQWhfg==
   dependencies:
-    "@apollo/federation-internals" "^2.0.0-alpha.2"
-    "@apollo/query-graphs" "^2.0.0-alpha.2"
+    "@apollo/federation-internals" "^2.0.0-alpha.3"
+    "@apollo/query-graphs" "^2.0.0-alpha.3"
 
 "@apollo/core-schema@^0.2.0":
   version "0.2.0"
