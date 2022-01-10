@@ -20,7 +20,7 @@
     "@apollo/composition": "^2.0.0-alpha.2",
     "@apollo/federation-1": "npm:@apollo/federation@0.33.8",
     "@apollo/federation-internals": "^2.0.0-alpha.2",
-    "@apollo/query-planner": "^2.0.0-alpha.2",
+    "@apollo/query-planner": "^2.0.0-alpha.3",
     "@apollo/query-planner-1": "npm:@apollo/query-planner@0.6.1",
     "@apollo/subgraph": "^2.0.0-alpha.2",
     "@urql/core": "^2.3.6",
