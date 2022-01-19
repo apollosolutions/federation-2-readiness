@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 import { queryPlan as queryPlan1 } from './one.js';
 import { queryPlan as queryPlan2 } from './two.js';
 import { diffQueryPlans, normalizeQueryPlan } from './diff.js';
@@ -14,15 +15,32 @@ import { diffQueryPlans, normalizeQueryPlan } from './diff.js';
 export async function queryPlanAudit({ fed1Schema, fed2Schema, operations }) {
   return Promise.all(
     operations.map(async (op) => {
-      try {
-        const [one, two] = await Promise.all([
-          queryPlan1(fed1Schema, op.querySignature, op.queryName),
-          queryPlan2(fed2Schema, op.querySignature, op.queryName),
-        ]);
+      const [{ one, oneError }, { two, twoError }] = await Promise.all([
+        queryPlan1(fed1Schema, op.querySignature, op.queryName).then(
+          (qp) => ({ one: qp, oneError: undefined }),
+          (e) => ({ one: undefined, oneError: e }),
+        ),
 
+        queryPlan2(fed2Schema, op.querySignature, op.queryName).then(
+          (qp) => ({ two: qp, twoError: undefined }),
+          (e) => ({ two: undefined, twoError: e }),
+        ),
+      ]);
+
+      if (oneError || twoError) {
+        return {
+          type: 'FAILURE',
+          ...op,
+          one,
+          two,
+          oneError,
+          twoError,
+        };
+      }
+
+      if (one && two) {
         const normalizedOne = normalizeQueryPlan(one);
         const normalizedTwo = normalizeQueryPlan(two);
-
         const { differences } = diffQueryPlans(normalizedOne, normalizedTwo);
 
         return {
@@ -34,9 +52,9 @@ export async function queryPlanAudit({ fed1Schema, fed2Schema, operations }) {
           normalizedTwo,
           ...op,
         };
-      } catch (e) {
-        return { type: 'FAILURE', ...op };
       }
+
+      return { type: 'FAILURE', ...op };
     }),
   );
 }
