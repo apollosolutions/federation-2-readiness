@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { mkdir, writeFile } from 'fs/promises';
 import { join } from 'path';
 import { Command, Option } from 'clipanion';
@@ -114,19 +115,24 @@ const COLORS = {
 };
 
 /**
+ * @param {any} condition
+ * @param {string} message
+ * @returns {asserts condition}
+ */
+function assert(condition, message) {
+  if (!condition) {
+    throw new Error(message);
+  }
+}
+
+/**
  *
  * @param {import('../typings.js').AuditResult} result
  * @param {string} graphRef
  * @returns {string}
  */
 function generateReport(result, graphRef) {
-  if (!result) {
-    return '';
-  }
-
-  if (result.type === 'FAILURE') {
-    return 'Query planning failed';
-  }
+  assert(result?.type === 'SUCCESS', 'result must be successful');
 
   const title = `${result.queryName} ${result.queryId?.slice(0, 6)}`;
   const [graph, variant] = graphRef.split('@');
@@ -167,6 +173,53 @@ function generateReport(result, graphRef) {
     '-----------------------',
     '```',
     serializeQueryPlan(result.two),
+    '```',
+  ].join('\n');
+}
+
+/**
+ *
+ * @param {import('../typings.js').AuditResult} result
+ * @param {string} graphRef
+ * @returns {string}
+ */
+function generateFailureReport(result, graphRef) {
+  assert(result?.type === 'FAILURE', 'result must be failure');
+
+  const title = `${result.queryName} ${result.queryId?.slice(0, 6)}`;
+  const [graph, variant] = graphRef.split('@');
+
+  return [
+    title,
+    '='.repeat(title.length),
+    `https://studio.apollographql.com/graph/${graph}/operations?query=${result.queryId}&queryName=${result.queryName}&variant=${variant}`,
+    '',
+    `* Federation One Query Plan: ${result.one ? '✅' : '❌'}`,
+    `* Federation Two Query Plan: ${result.two ? '✅' : '❌'}`,
+    ...(result.oneError
+      ? [
+          '',
+          'Federation One Error',
+          '--------------------',
+          '',
+          result.oneError.message,
+          '',
+        ]
+      : []),
+    ...(result.twoError
+      ? [
+          '',
+          'Federation Two Error',
+          '--------------------',
+          '',
+          result.twoError.message,
+          '',
+        ]
+      : []),
+    'Operation',
+    '---------',
+    '```graphql',
+    print(parse(result.querySignature || '')),
     '```',
   ].join('\n');
 }
@@ -250,7 +303,7 @@ export default class AuditCommand extends Command {
 
     spinner.stop();
 
-    if (!fed1.schema) {
+    if (!fed1.schema || fed1.errors?.length) {
       this.context.stdout.write(
         '💣 Schema did not compose with Federation 1\n',
       );
@@ -259,7 +312,7 @@ export default class AuditCommand extends Command {
       return;
     }
 
-    if (!fed2.schema) {
+    if (!fed2.schema || fed2.errors) {
       this.context.stdout.write(
         '💣 Schema did not compose with Federation 2\n',
       );
@@ -302,30 +355,59 @@ export default class AuditCommand extends Command {
       this.context.stdout.write(
         `❌ Operations with differences: ${total - matched}\n`,
       );
-      this.context.stdout.write(
-        '\nAdd --out <directory> to print reports for each operation.\n',
-      );
     }
 
     if (this.out) {
       await mkdir(this.out, { recursive: true });
 
       for (const result of results) {
+        const name = `${result.queryName ?? 'Unnamed'}-${result.queryId.slice(
+          0,
+          6,
+        )}.md`;
+        const path = join(this.out, name);
+
         if (result.type === 'SUCCESS' && !result.queryPlansMatch) {
-          const path = join(
-            this.out,
-            `${result.queryName ?? 'Unnamed'}-${result.queryId.slice(0, 6)}.md`,
-          );
           // eslint-disable-next-line no-await-in-loop
           await writeFile(
             path,
             generateReport(result, config.experimental_fed2readiness.graph_ref),
             'utf-8',
           );
+        } else if (result.type === 'FAILURE') {
+          // eslint-disable-next-line no-await-in-loop
+          await writeFile(
+            path,
+            generateFailureReport(
+              result,
+              config.experimental_fed2readiness.graph_ref,
+            ),
+            'utf-8',
+          );
         }
       }
 
+      if (fed1.supergraphSdl) {
+        await writeFile(
+          join(this.out, '.supergraph.fed1.graphql'),
+          fed1.supergraphSdl,
+          'utf-8',
+        );
+      }
+
+      if (fed2.supergraphSdl) {
+        await writeFile(
+          join(this.out, '.supergraph.fed2.graphql'),
+          fed2.supergraphSdl,
+          'utf-8',
+        );
+      }
+
       this.context.stdout.write(`Results written to ${this.out}\n`);
+    } else {
+      this.context.stdout.write(
+        '\nAdd --out <directory> to print reports for each operation.\n',
+      );
     }
   }
 }

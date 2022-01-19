@@ -30,6 +30,10 @@ type AuditResult =
       queryId: string;
       queryName: string | undefined;
       querySignature: string;
+      one?: QueryPlan_1 | undefined;
+      two?: QueryPlan_2 | undefined;
+      oneError?: Error | undefined;
+      twoError?: Error | undefined;
     };
 
 interface QueryPlanVisitor {
