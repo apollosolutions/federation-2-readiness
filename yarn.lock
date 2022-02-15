@@ -24,10 +24,10 @@
     apollo-server-types "^3.0.2"
     lodash.xorby "^4.7.0"
 
-"@apollo/federation-internals@^2.0.0-alpha.5":
-  version "2.0.0-alpha.5"
-  resolved "https://registry.yarnpkg.com/@apollo/federation-internals/-/federation-internals-2.0.0-alpha.5.tgz#c3caef0e03432fc0ccff630540de36777432cc25"
-  integrity sha512-YFqmjPtw6m8R74y9cEf3Gm4BegZqJgZV1CtUN6D5QDn6vNb2R4ctgHNa0nua5CZy7iK8/gwh4mUgrMqoJl+7zQ==
+"@apollo/federation-internals@^2.0.0-alpha.5", "@apollo/federation-internals@^2.0.0-alpha.6":
+  version "2.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@apollo/federation-internals/-/federation-internals-2.0.0-alpha.6.tgz#c1d9de97153f2201a7cda99b9fe86fe414d2e838"
+  integrity sha512-FEBbt7FzWyxHOmP8ISXUCWKYF/C1qNlWg4xjqPOy/s2uXJXV0tWRtqLQbcwHp8+QrfITVl0rY+OuoXXQNDrWjQ==
   dependencies:
     "@apollo/core-schema" "^0.2.0"
     chalk "^4.1.0"
@@ -52,12 +52,12 @@
     "@types/node" "^10.1.0"
     long "^4.0.0"
 
-"@apollo/query-graphs@^2.0.0-alpha.5":
-  version "2.0.0-alpha.5"
-  resolved "https://registry.yarnpkg.com/@apollo/query-graphs/-/query-graphs-2.0.0-alpha.5.tgz#b395b3c6068dd4acf72ead728235625255faff85"
-  integrity sha512-Ys7/Pclxv2CFEgH/IGhPiTb3Sg3tB8ru0NJeILyWrcndywYpVIlPe+cG+npz2PWm2BY4eBijEy9MGCeQfKacSg==
+"@apollo/query-graphs@^2.0.0-alpha.5", "@apollo/query-graphs@^2.0.0-alpha.6":
+  version "2.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@apollo/query-graphs/-/query-graphs-2.0.0-alpha.6.tgz#251ce829318f202a56224d79a96f3bc88046f73f"
+  integrity sha512-FTeU69pq1TD42G4qit/GP8yG24gMrgOhxa7wzVO33zYQl2mbWj40WD7aLi60wZFCRVOGUKJObIIhaQFVK/A77g==
   dependencies:
-    "@apollo/federation-internals" "^2.0.0-alpha.5"
+    "@apollo/federation-internals" "^2.0.0-alpha.6"
     deep-equal "^2.0.5"
     ts-graphviz "^0.16.0"
 
@@ -70,13 +70,13 @@
     deep-equal "^2.0.5"
     pretty-format "^27.4.6"
 
-"@apollo/query-planner@^2.0.0-alpha.5":
-  version "2.0.0-alpha.5"
-  resolved "https://registry.yarnpkg.com/@apollo/query-planner/-/query-planner-2.0.0-alpha.5.tgz#b6cb96911adbd9ceec222d50c8178471dce03554"
-  integrity sha512-4cE7whmEH5fWGU0n9fdym7GqZCE1jNW54Sisut8I9m2MaDiebLEOtkUv6VeVY3SZ/yy879PmTBfKjyBumk1Yug==
+"@apollo/query-planner@^2.0.0-alpha.6":
+  version "2.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@apollo/query-planner/-/query-planner-2.0.0-alpha.6.tgz#fc4cd3057be9bba3abfa9a5cf93e7cfbc92e6b4a"
+  integrity sha512-nBsFqhG8c8cPT7urJMedsX2MOyVfJJQ3+2OU8EqJT6iYkU6XBFizF471vsEsjz6DYdpoktWvHyDGR1rQtRigzA==
   dependencies:
-    "@apollo/federation-internals" "^2.0.0-alpha.5"
-    "@apollo/query-graphs" "^2.0.0-alpha.5"
+    "@apollo/federation-internals" "^2.0.0-alpha.6"
+    "@apollo/query-graphs" "^2.0.0-alpha.6"
     chalk "^4.1.0"
     deep-equal "^2.0.5"
     pretty-format "^27.0.0"
@@ -5636,16 +5636,7 @@ prepend-http@^2.0.0:
   resolved "https://registry.npmjs.org/prepend-http/-/prepend-http-2.0.0.tgz"
   integrity sha1-6SQ0v6XqjBn0HN/UAddBo8gZ2Jc=
 
-pretty-format@^27.0.0, pretty-format@^27.4.6:
-  version "27.4.6"
-  resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-27.4.6.tgz#1b784d2f53c68db31797b2348fa39b49e31846b7"
-  integrity sha512-NblstegA1y/RJW2VyML+3LlpFjzx62cUrtBIKIWDXEDkjNeleA7Od7nrzcs/VLQvAeV4CgSYhrN39DRN88Qi/g==
-  dependencies:
-    ansi-regex "^5.0.1"
-    ansi-styles "^5.0.0"
-    react-is "^17.0.1"
-
-pretty-format@^27.5.1:
+pretty-format@^27.0.0, pretty-format@^27.4.6, pretty-format@^27.5.1:
   version "27.5.1"
   resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-27.5.1.tgz#2181879fdea51a7a5851fb39d920faa63f01d88e"
   integrity sha512-Qb1gy5OrP5+zDf2Bvnzdl3jsTf1qXVMazbvCoKhtKqVs4/YK4ozX4gKQJJVyNe+cajNPn0KoC0MC3FUmaHWEmQ==
