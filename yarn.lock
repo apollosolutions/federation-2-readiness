@@ -2,13 +2,13 @@
 # yarn lockfile v1
 
 
-"@apollo/composition@^2.0.0-alpha.5":
-  version "2.0.0-alpha.5"
-  resolved "https://registry.yarnpkg.com/@apollo/composition/-/composition-2.0.0-alpha.5.tgz#e650ea5b134c5f35e70ce92ce47b87bf13abbc51"
-  integrity sha512-0Fs+K+bcLPBGoIbCL4NSGF28CK50sMc4vun+Too+hk2mxiKvAp09Vt1I1QncJK0vucceiJiEvxtqMlsFxkMlhQ==
+"@apollo/composition@^2.0.0-alpha.6":
+  version "2.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@apollo/composition/-/composition-2.0.0-alpha.6.tgz#bdc2920c4c1a3514739e75787a9c1d27c814a04a"
+  integrity sha512-nuShj18+pdOLF8RiR2wKOpDAM1dDyCnRnsRIbEQdfjpYFLy0nlzmmnqeFmoWBB5RxUEpt0/KEcraxkCn3/MCRg==
   dependencies:
-    "@apollo/federation-internals" "^2.0.0-alpha.5"
-    "@apollo/query-graphs" "^2.0.0-alpha.5"
+    "@apollo/federation-internals" "^2.0.0-alpha.6"
+    "@apollo/query-graphs" "^2.0.0-alpha.6"
 
 "@apollo/core-schema@^0.2.0":
   version "0.2.1"
@@ -24,10 +24,10 @@
     apollo-server-types "^3.0.2"
     lodash.xorby "^4.7.0"
 
-"@apollo/federation-internals@^2.0.0-alpha.5":
-  version "2.0.0-alpha.5"
-  resolved "https://registry.yarnpkg.com/@apollo/federation-internals/-/federation-internals-2.0.0-alpha.5.tgz#c3caef0e03432fc0ccff630540de36777432cc25"
-  integrity sha512-YFqmjPtw6m8R74y9cEf3Gm4BegZqJgZV1CtUN6D5QDn6vNb2R4ctgHNa0nua5CZy7iK8/gwh4mUgrMqoJl+7zQ==
+"@apollo/federation-internals@^2.0.0-alpha.6":
+  version "2.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@apollo/federation-internals/-/federation-internals-2.0.0-alpha.6.tgz#c1d9de97153f2201a7cda99b9fe86fe414d2e838"
+  integrity sha512-FEBbt7FzWyxHOmP8ISXUCWKYF/C1qNlWg4xjqPOy/s2uXJXV0tWRtqLQbcwHp8+QrfITVl0rY+OuoXXQNDrWjQ==
   dependencies:
     "@apollo/core-schema" "^0.2.0"
     chalk "^4.1.0"
@@ -52,12 +52,12 @@
     "@types/node" "^10.1.0"
     long "^4.0.0"
 
-"@apollo/query-graphs@^2.0.0-alpha.5":
-  version "2.0.0-alpha.5"
-  resolved "https://registry.yarnpkg.com/@apollo/query-graphs/-/query-graphs-2.0.0-alpha.5.tgz#b395b3c6068dd4acf72ead728235625255faff85"
-  integrity sha512-Ys7/Pclxv2CFEgH/IGhPiTb3Sg3tB8ru0NJeILyWrcndywYpVIlPe+cG+npz2PWm2BY4eBijEy9MGCeQfKacSg==
+"@apollo/query-graphs@^2.0.0-alpha.6":
+  version "2.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@apollo/query-graphs/-/query-graphs-2.0.0-alpha.6.tgz#251ce829318f202a56224d79a96f3bc88046f73f"
+  integrity sha512-FTeU69pq1TD42G4qit/GP8yG24gMrgOhxa7wzVO33zYQl2mbWj40WD7aLi60wZFCRVOGUKJObIIhaQFVK/A77g==
   dependencies:
-    "@apollo/federation-internals" "^2.0.0-alpha.5"
+    "@apollo/federation-internals" "^2.0.0-alpha.6"
     deep-equal "^2.0.5"
     ts-graphviz "^0.16.0"
 
@@ -70,13 +70,13 @@
     deep-equal "^2.0.5"
     pretty-format "^27.4.6"
 
-"@apollo/query-planner@^2.0.0-alpha.5":
-  version "2.0.0-alpha.5"
-  resolved "https://registry.yarnpkg.com/@apollo/query-planner/-/query-planner-2.0.0-alpha.5.tgz#b6cb96911adbd9ceec222d50c8178471dce03554"
-  integrity sha512-4cE7whmEH5fWGU0n9fdym7GqZCE1jNW54Sisut8I9m2MaDiebLEOtkUv6VeVY3SZ/yy879PmTBfKjyBumk1Yug==
+"@apollo/query-planner@^2.0.0-alpha.6":
+  version "2.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@apollo/query-planner/-/query-planner-2.0.0-alpha.6.tgz#fc4cd3057be9bba3abfa9a5cf93e7cfbc92e6b4a"
+  integrity sha512-nBsFqhG8c8cPT7urJMedsX2MOyVfJJQ3+2OU8EqJT6iYkU6XBFizF471vsEsjz6DYdpoktWvHyDGR1rQtRigzA==
   dependencies:
-    "@apollo/federation-internals" "^2.0.0-alpha.5"
-    "@apollo/query-graphs" "^2.0.0-alpha.5"
+    "@apollo/federation-internals" "^2.0.0-alpha.6"
+    "@apollo/query-graphs" "^2.0.0-alpha.6"
     chalk "^4.1.0"
     deep-equal "^2.0.5"
     pretty-format "^27.0.0"
@@ -5035,10 +5035,10 @@ make-error@^1, make-error@^1.1.1:
   resolved "https://registry.npmjs.org/make-error/-/make-error-1.3.6.tgz"
   integrity sha512-s8UhlNe7vPKomQhC1qFelMokr/Sc3AgNbso3n74mVPA5LTZwkB9NlXf4XPamLxJE8h0gh73rM94xvwRT2CVInw==
 
-make-fetch-happen@^10.0.2:
-  version "10.0.2"
-  resolved "https://registry.yarnpkg.com/make-fetch-happen/-/make-fetch-happen-10.0.2.tgz#0afb38d2f951b17ebc482b0b16c8d77f39dfe389"
-  integrity sha512-JSFLK53NJP22FL/eAGOyKsWbc2G3v+toPMD7Dq9PJKQCvK0i3t8hGkKxe+3YZzwYa+c0kxRHu7uxH3fvO+rsaA==
+make-fetch-happen@^10.0.3:
+  version "10.0.3"
+  resolved "https://registry.yarnpkg.com/make-fetch-happen/-/make-fetch-happen-10.0.3.tgz#94bbe675cf62a811dbab59668052388a078beaf2"
+  integrity sha512-CzarPHynPpHjhF5in/YapnO44rSZeYX5VCMfdXa99+gLwpbfFLh20CWa6dP/taV9Net9PWJwXNKtp/4ZTCQnag==
   dependencies:
     agentkeepalive "^4.2.0"
     cacache "^15.3.0"
