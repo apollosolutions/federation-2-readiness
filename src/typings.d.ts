@@ -4,6 +4,12 @@ import {
   ParallelNode,
   SequenceNode,
 } from '@apollo/query-planner';
+import {
+  FetchNode1,
+  FlattenNode1,
+  ParallelNode1,
+  SequenceNode1,
+} from '@apollo/query-planner-1';
 import { QueryPlan as QueryPlan_1 } from '@apollo/query-planner-1';
 import { QueryPlan as QueryPlan_2 } from '@apollo/query-planner';
 
@@ -36,9 +42,16 @@ type AuditResult =
       twoError?: Error | undefined;
     };
 
-interface QueryPlanVisitor {
+interface QueryPlanVisitor2 {
   Fetch?: (node: FetchNode) => FetchNode | undefined;
   Flatten?: (node: FlattenNode) => FlattenNode | undefined;
   Parallel?: (node: ParallelNode) => ParallelNode | undefined;
   Sequence?: (node: SequenceNode) => SequenceNode | undefined;
+}
+
+interface QueryPlanVisitor1 {
+  Fetch?: (node: FetchNode1) => FetchNode1 | undefined;
+  Flatten?: (node: FlattenNode1) => FlattenNode1 | undefined;
+  Parallel?: (node: ParallelNode1) => ParallelNode1 | undefined;
+  Sequence?: (node: SequenceNode1) => SequenceNode1 | undefined;
 }

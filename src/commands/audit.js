@@ -5,7 +5,8 @@ import { Command, Option } from 'clipanion';
 import inquirer from 'inquirer';
 import { parse, print, printError } from 'graphql';
 import { diff } from 'jest-diff';
-import { serializeQueryPlan } from '@apollo/query-planner';
+import { serializeQueryPlan as serializeQueryPlan1 } from '@apollo/query-planner-1';
+import { serializeQueryPlan as serializeQueryPlan2 } from '@apollo/query-planner';
 import ora from 'ora';
 import parseDuration from 'parse-duration';
 import {
@@ -151,8 +152,8 @@ function generateReport(result, graphRef) {
     'Diff after query plan normalization (field sorting, etc.)',
     '```diff',
     diff(
-      serializeQueryPlan(result.normalizedOne),
-      serializeQueryPlan(result.normalizedTwo),
+      serializeQueryPlan1(result.normalizedOne),
+      serializeQueryPlan2(result.normalizedTwo),
       COLORS,
     ),
     '```',
@@ -166,13 +167,13 @@ function generateReport(result, graphRef) {
     'Federation 1 Query Plan',
     '-----------------------',
     '```',
-    serializeQueryPlan(result.one),
+    serializeQueryPlan1(result.one),
     '```',
     '',
     'Federation 2 Query Plan',
     '-----------------------',
     '```',
-    serializeQueryPlan(result.two),
+    serializeQueryPlan2(result.two),
     '```',
   ].join('\n');
 }
