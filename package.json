@@ -17,10 +17,10 @@
     "test": "node --experimental-vm-modules $(yarn bin)/jest src"
   },
   "dependencies": {
-    "@apollo/composition": "^2.0.0-alpha.5",
+    "@apollo/composition": "^2.0.0-alpha.6",
     "@apollo/federation-1": "npm:@apollo/federation@0.35.1",
-    "@apollo/federation-internals": "^2.0.0-alpha.5",
-    "@apollo/query-planner": "^2.0.0-alpha.5",
+    "@apollo/federation-internals": "^2.0.0-alpha.6",
+    "@apollo/query-planner": "^2.0.0-alpha.6",
     "@apollo/query-planner-1": "npm:@apollo/query-planner@0.8.0",
     "@apollo/subgraph": "^2.0.0-alpha.4",
     "@urql/core": "^2.4.1",
@@ -39,7 +39,7 @@
   "devDependencies": {
     "@graphql-codegen/cli": "^2.6.1",
     "@graphql-codegen/typed-document-node": "^2.2.3",
-    "@graphql-codegen/typescript": "^2.4.3",
+    "@graphql-codegen/typescript": "^2.4.4",
     "@graphql-codegen/typescript-operations": "^2.3.0",
     "@graphql-eslint/eslint-plugin": "^3.8.0",
     "@types/inquirer": "^8.2.0",
