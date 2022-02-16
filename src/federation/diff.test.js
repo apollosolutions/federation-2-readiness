@@ -1,4 +1,6 @@
-import { diffQueryPlans, normalizeQueryPlan } from './diff.js';
+import { diffQueryPlans } from './diff.js';
+import { normalizeQueryPlan as normalizeQueryPlan1 } from './normalize-1.js';
+import { normalizeQueryPlan as normalizeQueryPlan2 } from './normalize-2.js';
 
 test('normalize', () => {
   /** @type {import('@apollo/query-planner-1').QueryPlan} */
@@ -50,6 +52,7 @@ test('normalize', () => {
           serviceName: 'missions',
           variableUsages: [],
           operation: '{missions{id designation crew{id __typename}}}',
+          operationKind: 'query',
         },
         {
           kind: 'Flatten',
@@ -70,6 +73,7 @@ test('normalize', () => {
             variableUsages: [],
             operation:
               'query($representations:[_Any!]!){_entities(representations:$representations){...on Astronaut{name}}}',
+            operationKind: 'query',
           },
         },
       ],
@@ -77,8 +81,8 @@ test('normalize', () => {
   };
 
   const result = diffQueryPlans(
-    normalizeQueryPlan(one),
-    normalizeQueryPlan(two),
+    normalizeQueryPlan1(one),
+    normalizeQueryPlan2(two),
   );
 
   expect(result.differences).toBe(0);

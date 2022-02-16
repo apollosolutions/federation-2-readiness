@@ -1,7 +1,9 @@
 /* eslint-disable no-return-assign */
 import { queryPlan as queryPlan1 } from './one.js';
 import { queryPlan as queryPlan2 } from './two.js';
-import { diffQueryPlans, normalizeQueryPlan } from './diff.js';
+import { diffQueryPlans } from './diff.js';
+import { normalizeQueryPlan as normalizeQueryPlan1 } from './normalize-1.js';
+import { normalizeQueryPlan as normalizeQueryPlan2 } from './normalize-2.js';
 
 /**
  * @typedef {import('../typings.js').Operation} Operation
@@ -39,8 +41,8 @@ export async function queryPlanAudit({ fed1Schema, fed2Schema, operations }) {
       }
 
       if (one && two) {
-        const normalizedOne = normalizeQueryPlan(one);
-        const normalizedTwo = normalizeQueryPlan(two);
+        const normalizedOne = normalizeQueryPlan1(one);
+        const normalizedTwo = normalizeQueryPlan2(two);
         const { differences } = diffQueryPlans(normalizedOne, normalizedTwo);
 
         return {
