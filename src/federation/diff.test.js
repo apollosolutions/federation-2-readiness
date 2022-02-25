@@ -1,3 +1,4 @@
+import { OperationTypeNode } from 'graphql';
 import { diffQueryPlans } from './diff.js';
 import { normalizeQueryPlan as normalizeQueryPlan1 } from './normalize-1.js';
 import { normalizeQueryPlan as normalizeQueryPlan2 } from './normalize-2.js';
@@ -52,7 +53,7 @@ test('normalize', () => {
           serviceName: 'missions',
           variableUsages: [],
           operation: '{missions{id designation crew{id __typename}}}',
-          operationKind: 'query',
+          operationKind: OperationTypeNode.QUERY,
         },
         {
           kind: 'Flatten',
@@ -73,7 +74,7 @@ test('normalize', () => {
             variableUsages: [],
             operation:
               'query($representations:[_Any!]!){_entities(representations:$representations){...on Astronaut{name}}}',
-            operationKind: 'query',
+            operationKind: OperationTypeNode.QUERY,
           },
         },
       ],

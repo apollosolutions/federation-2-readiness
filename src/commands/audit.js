@@ -190,6 +190,14 @@ function generateFailureReport(result, graphRef) {
   const title = `${result.queryName} ${result.queryId?.slice(0, 6)}`;
   const [graph, variant] = graphRef.split('@');
 
+  const operation = (() => {
+    try {
+      return print(parse(result.querySignature || ''));
+    } catch (e) {
+      return result.querySignature;
+    }
+  })();
+
   return [
     title,
     '='.repeat(title.length),
@@ -220,7 +228,7 @@ function generateFailureReport(result, graphRef) {
     'Operation',
     '---------',
     '```graphql',
-    print(parse(result.querySignature || '')),
+    operation,
     '```',
   ].join('\n');
 }
