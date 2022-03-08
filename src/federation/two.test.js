@@ -73,8 +73,9 @@ Object {
     "nodes": Array [
       Object {
         "kind": "Fetch",
-        "operation": "query($search:[String!]){products(search:$search){__typename id name}}",
+        "operation": "query Search__products__0($search:[String!]){products(search:$search){__typename id name}}",
         "operationKind": "query",
+        "operationName": "Search__products__0",
         "requires": undefined,
         "serviceName": "products",
         "variableUsages": Array [
@@ -85,8 +86,9 @@ Object {
         "kind": "Flatten",
         "node": Object {
           "kind": "Fetch",
-          "operation": "query($representations:[_Any!]!){_entities(representations:$representations){...on Product{reviews{rating}}}}",
+          "operation": "query Search__reviews__1($representations:[_Any!]!){_entities(representations:$representations){...on Product{reviews{rating}}}}",
           "operationKind": "query",
+          "operationName": "Search__reviews__1",
           "requires": Array [
             Object {
               "kind": "InlineFragment",
