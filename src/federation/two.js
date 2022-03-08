@@ -1,7 +1,7 @@
 import { compose } from '@apollo/composition';
 import {
   buildSchema,
-  federationBuiltIns,
+  FederationBlueprint,
   operationFromDocument,
   Subgraph,
   Subgraphs,
@@ -18,17 +18,15 @@ export async function composeWithResolvedConfig(config) {
 
   for (const [name, { url, schema: sdl }] of Object.entries(config.subgraphs)) {
     try {
-      const schema = buildSchema(
-        sdl,
-        federationBuiltIns,
-        false, // validate
-      );
+      const schema = buildSchema(sdl, {
+        blueprint: new FederationBlueprint(),
+        validate: false,
+      });
 
       const subgraph = new Subgraph(
         name,
         url ?? 'http://localhost:4001',
         schema,
-        false, // validate
       );
 
       subgraphs.add(subgraph);

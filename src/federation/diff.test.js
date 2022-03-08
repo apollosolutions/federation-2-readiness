@@ -54,6 +54,7 @@ test('normalize', () => {
           variableUsages: [],
           operation: '{missions{id designation crew{id __typename}}}',
           operationKind: OperationTypeNode.QUERY,
+          operationName: undefined,
         },
         {
           kind: 'Flatten',
@@ -75,6 +76,7 @@ test('normalize', () => {
             operation:
               'query($representations:[_Any!]!){_entities(representations:$representations){...on Astronaut{name}}}',
             operationKind: OperationTypeNode.QUERY,
+            operationName: undefined,
           },
         },
       ],
