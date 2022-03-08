@@ -203,12 +203,12 @@ function generateFailureReport(result, graphRef) {
     '='.repeat(title.length),
     `https://studio.apollographql.com/graph/${graph}/operations?query=${result.queryId}&queryName=${result.queryName}&variant=${variant}`,
     '',
-    `* Federation One Query Plan: ${result.one ? '✅' : '❌'}`,
-    `* Federation Two Query Plan: ${result.two ? '✅' : '❌'}`,
+    `* Federation v1 Query Plan: ${result.one ? '✅' : '❌'}`,
+    `* Federation v2 Query Plan: ${result.two ? '✅' : '❌'}`,
     ...(result.oneError
       ? [
           '',
-          'Federation One Error',
+          'Federation v1 Error',
           '--------------------',
           '',
           result.oneError.message,
@@ -218,7 +218,7 @@ function generateFailureReport(result, graphRef) {
     ...(result.twoError
       ? [
           '',
-          'Federation Two Error',
+          'Federation v2 Error',
           '--------------------',
           '',
           result.twoError.message,
@@ -314,23 +314,25 @@ export default class AuditCommand extends Command {
 
     if (!fed1.schema || fed1.errors?.length) {
       this.context.stdout.write(
-        '💣 Schema did not compose with Federation 1\n',
+        '💣 Schema did not compose with Federation v1\n',
       );
       this.context.stderr.write(fed1.errors?.map(printError)?.join('\n\n'));
       this.context.stdout.write('');
       return;
     }
 
+    this.context.stdout.write('✅ Schema composes with Federation v1\n');
+
     if (!fed2.schema || fed2.errors) {
       this.context.stdout.write(
-        '💣 Schema did not compose with Federation 2\n',
+        '💣 Schema did not compose with Federation v2\n',
       );
       this.context.stdout.write(fed2.errors.map(printError).join('\n\n'));
       this.context.stdout.write('');
       return;
     }
 
-    this.context.stdout.write('🎉 Composed successfully\n');
+    this.context.stdout.write('✅ Schema composes with Federation v2\n');
 
     const operations = await getOperations(
       client,
