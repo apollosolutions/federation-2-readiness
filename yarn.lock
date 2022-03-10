@@ -2486,10 +2486,10 @@ cli-width@^3.0.0:
   resolved "https://registry.npmjs.org/cli-width/-/cli-width-3.0.0.tgz"
   integrity sha512-FxqpkPPwu1HjuN93Omfm4h8uIanXofW0RxVEW3k5RKx+mJJYSthzNhp32Kzxxy3YAEZ/Dc/EWN1vZRY0+kOhbw==
 
-clipanion@^3.2.0-rc.8:
-  version "3.2.0-rc.8"
-  resolved "https://registry.yarnpkg.com/clipanion/-/clipanion-3.2.0-rc.8.tgz#6a1ee48c9d55591df564a5caa111d10153ba46d9"
-  integrity sha512-GiVWNN3kESWEe+KumOUF/chLclLP3xdJ5PkIRmAxZr5k8Mff3DXs2F536VMc+llnpW88PGGMxqwQcIwXdE/pfA==
+clipanion@^3.2.0-rc.10:
+  version "3.2.0-rc.10"
+  resolved "https://registry.yarnpkg.com/clipanion/-/clipanion-3.2.0-rc.10.tgz#d1a288c71659decd3fc7ff72e100198c082d8748"
+  integrity sha512-OrDP3/bLGxf2BSGarzvqm4PrH5Pii7YoLNt/FnuJWJcnL735m2UOWEV2dCNcJ5QBgmoZF7X7vU7hetALmIqs4Q==
   dependencies:
     typanion "^3.3.1"
 
