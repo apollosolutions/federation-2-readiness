@@ -11,7 +11,7 @@ const [_, __, ...args] = process.argv;
 
 const cli = new Cli({
   binaryLabel: 'Federation 2 Readiness',
-  binaryName: `npx github:@apollosolutions/federation-2-readiness`,
+  binaryName: 'npx github:@apollosolutions/federation-2-readiness',
   binaryVersion: '1.0.0',
 });
 
