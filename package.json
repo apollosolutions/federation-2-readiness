@@ -18,10 +18,10 @@
     "test:debug": "node --inspect-brk --experimental-vm-modules $(yarn bin)/jest src"
   },
   "dependencies": {
-    "@apollo/composition": "^2.0.0-preview.3",
+    "@apollo/composition": "^2.0.0-preview.4",
     "@apollo/federation-1": "npm:@apollo/federation@0.35.1",
-    "@apollo/federation-internals": "^2.0.0-preview.3",
-    "@apollo/query-planner": "^2.0.0-preview.3",
+    "@apollo/federation-internals": "^2.0.0-preview.4",
+    "@apollo/query-planner": "^2.0.0-preview.4",
     "@apollo/query-planner-1": "npm:@apollo/query-planner@0.8.0",
     "@apollo/subgraph": "^2.0.0-preview.2",
     "@urql/core": "^2.4.1",
