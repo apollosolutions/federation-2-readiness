@@ -1,9 +1,8 @@
 import { compose } from '@apollo/composition';
 import {
-  buildSchema,
-  FederationBlueprint,
+  buildSubgraph,
+  errorCauses,
   operationFromDocument,
-  Subgraph,
   Subgraphs,
 } from '@apollo/federation-internals';
 import { QueryPlanner } from '@apollo/query-planner';
@@ -18,19 +17,15 @@ export async function composeWithResolvedConfig(config) {
 
   for (const [name, { url, schema: sdl }] of Object.entries(config.subgraphs)) {
     try {
-      const schema = buildSchema(sdl, {
-        blueprint: new FederationBlueprint(),
-        validate: false,
-      });
-
-      const subgraph = new Subgraph(
-        name,
-        url ?? 'http://localhost:4001',
-        schema,
-      );
-
+      const subgraph = buildSubgraph(name, url ?? 'http://localhost:4001', sdl);
       subgraphs.add(subgraph);
     } catch (e) {
+      const graphQLCauses = errorCauses(/** @type {Error} */ (e));
+      if (graphQLCauses) {
+        return {
+          errors: graphQLCauses,
+        };
+      }
       throw new Error(`failed to build schema for ${name} subgraph`);
     }
   }
