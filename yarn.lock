@@ -93,10 +93,10 @@
   resolved "https://registry.yarnpkg.com/@apollo/subgraph/-/subgraph-0.3.1.tgz#33e2ca8f87a8b0bb988888de794361db04cedd95"
   integrity sha512-MWqzfZEcvN86iwwgsgkFnkoBvv/wCdw/qyXjayuZ4wwQgVZ8NpFNbUxjRC0MwKNHwBU/ZH1oDHOnC8WbUuUMsg==
 
-"@apollo/subgraph@^2.0.0-preview.2":
-  version "2.0.0-preview.2"
-  resolved "https://registry.yarnpkg.com/@apollo/subgraph/-/subgraph-2.0.0-preview.2.tgz#fe6c44c67ab4bab76193d361a4e2931d9af7f0a1"
-  integrity sha512-Zer2stOocF5FSEDL6B0Rsmc6dFBEP5xuEgzScPSlg/C7e9kQPYCjjEUPBWGnNGuYCwH+AblefPayJ+/xBPoFKA==
+"@apollo/subgraph@^2.0.0-preview.7":
+  version "2.0.0-preview.7"
+  resolved "https://registry.yarnpkg.com/@apollo/subgraph/-/subgraph-2.0.0-preview.7.tgz#aa6572cba8edaaf9f412c3efd346220dee9038eb"
+  integrity sha512-HHu0oJ8SoaJ+EQuGQ5cvpzMAB1NR5l7D9e4sO6EPsaQwKjs0A8NVJwuwpQzolVpos6CUVYpgAocsc/gd1292Wg==
 
 "@babel/code-frame@7.16.7", "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.12.13", "@babel/code-frame@^7.16.0", "@babel/code-frame@^7.16.7":
   version "7.16.7"
