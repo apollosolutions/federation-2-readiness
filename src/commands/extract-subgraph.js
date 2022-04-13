@@ -73,6 +73,8 @@ export default class ExtractSubgraphCommand extends Command {
 
   accountId = Option.String('--account', { required: false });
 
+  staging = Option.Boolean('--staging', { required: false });
+
   // @TODO should be required but that breaks the help command
   config = Option.String('--config', { required: false });
 
@@ -94,6 +96,7 @@ export default class ExtractSubgraphCommand extends Command {
 
     const client = await getClient(this.key, {
       useSudo: this.accountId != null,
+      staging: this.staging ?? false,
     });
 
     const config = await readConfig(this.config);

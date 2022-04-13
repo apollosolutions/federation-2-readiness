@@ -256,6 +256,8 @@ export default class AuditCommand extends Command {
 
   accountId = Option.String('--account', { required: false });
 
+  staging = Option.Boolean('--staging', { required: false });
+
   config = Option.String('--config', {
     required: false,
     description: 'Optional. Specify a supergraph YAML config on disk.',
@@ -288,6 +290,7 @@ export default class AuditCommand extends Command {
     const spinner = ora();
     const client = await getClient(this.key, {
       useSudo: this.accountId != null,
+      staging: this.staging ?? false,
     });
 
     const config = await getConfig(

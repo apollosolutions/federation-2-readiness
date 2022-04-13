@@ -25,6 +25,8 @@ export default class ConfigCommand extends Command {
 
   accountId = Option.String('--account', { required: false });
 
+  staging = Option.Boolean('--staging', { required: false });
+
   graphRef = Option.String('--graphref', { required: false });
 
   key = Option.String('--key', { required: false });
@@ -34,6 +36,7 @@ export default class ConfigCommand extends Command {
   async execute() {
     const client = await getClient(this.key, {
       useSudo: this.accountId != null,
+      staging: this.staging ?? false,
     });
 
     const config = await getConfig(

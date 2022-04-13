@@ -4,9 +4,9 @@ import fetch from 'make-fetch-happen';
 
 /**
  * @param {string | undefined} key
- * @param {{ useSudo: boolean }} options
+ * @param {{ useSudo: boolean; staging: boolean; }} options
  */
-export async function getClient(key, { useSudo }) {
+export async function getClient(key, { useSudo, staging }) {
   let apiKey = key;
   if (!key) {
     apiKey = process.env.APOLLO_KEY;
@@ -22,8 +22,12 @@ export async function getClient(key, { useSudo }) {
     throw new Error('missing api key');
   }
 
+  const url = staging
+    ? 'https://graphql-staging.api.apollographql.com/api/graphql'
+    : 'https://graphql.api.apollographql.com/api/graphql';
+
   return createClient({
-    url: 'https://graphql.api.apollographql.com/api/graphql',
+    url,
     // @ts-ignore - types don't match but it doesn't matter at runtime
     fetch,
     fetchOptions: {
