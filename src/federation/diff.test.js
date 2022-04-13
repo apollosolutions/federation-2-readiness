@@ -15,6 +15,7 @@ test('normalize', () => {
           serviceName: 'missions',
           variableUsages: [],
           operation: '{missions{crew{id __typename} designation id}}', // different order
+          operationKind: OperationTypeNode.QUERY,
         },
         {
           kind: 'Flatten',
@@ -36,6 +37,7 @@ test('normalize', () => {
             variableUsages: [],
             operation:
               'query($representations:[_Any!]!){_entities(representations:$representations){...on Astronaut{name}}}',
+            operationKind: OperationTypeNode.QUERY,
           },
         },
       ],
