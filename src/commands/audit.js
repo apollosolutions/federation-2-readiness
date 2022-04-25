@@ -22,10 +22,10 @@ import { getClient } from '../studio/index.js';
 import { queryPlanAudit } from '../federation/query-plan-audit.js';
 
 const FROM_OPTIONS = {
-  'Last Hour': '1h',
-  'Last Day': '1d',
-  'Last Week': '1w',
-  'Last Month': '1m',
+  'Last Hour': '-3600',
+  'Last Day': '-86400',
+  'Last Week': '-604800',
+  'Last Month': '-2592000',
 };
 
 /**
