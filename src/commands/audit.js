@@ -8,7 +8,6 @@ import { diff } from 'jest-diff';
 import { serializeQueryPlan as serializeQueryPlan1 } from '@apollo/query-planner-1';
 import { serializeQueryPlan as serializeQueryPlan2 } from '@apollo/query-planner';
 import ora from 'ora';
-import parseDuration from 'parse-duration';
 import {
   chooseVariant,
   getConfig,
@@ -68,7 +67,7 @@ async function getOperations(client, graphRef, from) {
       );
   }
 
-  const fromNumber = fromValue ? parseDuration(fromValue, 's') * -1 : undefined;
+  const fromNumber = fromValue ? parseInt(fromValue, 10) : undefined;
 
   const spinner = ora();
   spinner.text = 'Fetching operations';
