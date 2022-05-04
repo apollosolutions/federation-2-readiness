@@ -7,6 +7,8 @@ function hash() {
  * sharable package
  *
  * https://github.com/mdg-private/studio-ui/blob/f4341fd691794e68901b5122403b038749d15a82/src/app/graph/explorerPage/resultsPane/queryPlan/queryPlanToMermaid.ts#L137
+ * @param {import("@apollo/query-planner-1").PlanNode|import("@apollo/query-planner").PlanNode} currentNode
+ * @return {{nodeText: string, startHash: string, endHash: string}}
  */
 function process(currentNode) {
   switch (currentNode.kind) {
@@ -88,9 +90,18 @@ function process(currentNode) {
   }
 }
 
+/**
+ * @param {import("@apollo/query-planner").QueryPlan|import("@apollo/query-planner-1").QueryPlan} queryPlan
+ * @return {string}
+ */
 export function queryPlanToMermaid(queryPlan) {
+  const queryPlanNode = queryPlan.node;
+  if (!queryPlanNode) {
+    throw new Error('Invalid query plan');
+  }
+
   return `
     graph TD
-      ${process(queryPlan.node).nodeText}
+      ${process(queryPlanNode).nodeText}
   `.trim();
 }

@@ -384,18 +384,22 @@ export default class AuditCommand extends Command {
         const diagramPathFed2 = join(this.out, `${name}-fed2.mmd`);
 
         // Write Mermaid diagrams
-        // eslint-disable-next-line no-await-in-loop
-        await writeFile(
-            diagramPathFed1,
-            queryPlanToMermaid(result.one),
-            'utf-8',
-        );
-        // eslint-disable-next-line no-await-in-loop
-        await writeFile(
-            diagramPathFed2,
-            queryPlanToMermaid(result.two),
-            'utf-8',
-        );
+        if (result.one) {
+          // eslint-disable-next-line no-await-in-loop
+          await writeFile(
+              diagramPathFed1,
+              queryPlanToMermaid(result.one),
+              'utf-8',
+          );
+        }
+        if (result.two) {
+          // eslint-disable-next-line no-await-in-loop
+          await writeFile(
+              diagramPathFed2,
+              queryPlanToMermaid(result.two),
+              'utf-8',
+          );
+        }
 
         if (result.type === 'SUCCESS' && !result.queryPlansMatch) {
           // eslint-disable-next-line no-await-in-loop
