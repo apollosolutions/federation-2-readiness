@@ -19,6 +19,7 @@ import { composeWithResolvedConfig as composeWithResolvedConfig1 } from '../fede
 import { composeWithResolvedConfig as composeWithResolvedConfig2 } from '../federation/two.js';
 import { getClient } from '../studio/index.js';
 import { queryPlanAudit } from '../federation/query-plan-audit.js';
+import { queryPlanToMermaid } from '../federation/queryPlanToMermaid.js';
 
 const FROM_OPTIONS = {
   'Last Hour': '-3600',
@@ -377,8 +378,24 @@ export default class AuditCommand extends Command {
         const name = `${result.queryName ?? 'Unnamed'}-${result.queryId.slice(
           0,
           6,
-        )}.md`;
-        const path = join(this.out, name);
+        )}`;
+        const path = join(this.out, `${name}.md`);
+        const diagramPathFed1 = join(this.out, `${name}-fed1.mmd`);
+        const diagramPathFed2 = join(this.out, `${name}-fed2.mmd`);
+
+        // Write Mermaid diagrams
+        // eslint-disable-next-line no-await-in-loop
+        await writeFile(
+            diagramPathFed1,
+            queryPlanToMermaid(result.one),
+            'utf-8',
+        );
+        // eslint-disable-next-line no-await-in-loop
+        await writeFile(
+            diagramPathFed2,
+            queryPlanToMermaid(result.two),
+            'utf-8',
+        );
 
         if (result.type === 'SUCCESS' && !result.queryPlansMatch) {
           // eslint-disable-next-line no-await-in-loop
