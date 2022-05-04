@@ -15,7 +15,9 @@
     "codegen:compile": "tsc -p studio",
     "codegen:watch": "concurrently \"yarn codegen --watch\" \"yarn codegen:compile --watch\"",
     "test": "node --experimental-vm-modules $(yarn bin)/jest src",
-    "test:debug": "node --inspect-brk --experimental-vm-modules $(yarn bin)/jest src"
+    "test:debug": "node --inspect-brk --experimental-vm-modules $(yarn bin)/jest src",
+    "dev": "node bin/index.js",
+    "dev:customer": "node bin/index.js audit --account <account-name>"
   },
   "dependencies": {
     "@apollo/composition": "^2.0.0",
