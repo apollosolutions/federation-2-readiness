@@ -33,10 +33,10 @@
     apollo-server-types "^3.0.2"
     lodash.xorby "^4.7.0"
 
-"@apollo/federation-internals@^2.0.0", "@apollo/federation-internals@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@apollo/federation-internals/-/federation-internals-2.0.1.tgz#582bbc732015ec63117da958e79ded7495fbbf79"
-  integrity sha512-as2lL0tChwQx3PgBKQ8hELal2paBFsbucXSba+Gi84ZP1wGtYtl5kJmE7DVImsC+/CAVjEFWM7aWQGJg6Im8Ow==
+"@apollo/federation-internals@^2.0.1", "@apollo/federation-internals@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@apollo/federation-internals/-/federation-internals-2.0.2.tgz#f10e7d8c9a54846a5056055ec345813ca9e05fc3"
+  integrity sha512-yLooPy6q0FX351fDdBqNEm6hWz1tiV/oVOi2j8NYDL1sjPKR2cFedUjvQuAFmH8WfNXPOTIjMPJpO3XNMc4qCA==
   dependencies:
     "@apollo/core-schema" "~0.3.0"
     chalk "^4.1.0"
@@ -6648,7 +6648,7 @@ unique-slug@^2.0.0:
 
 universalify@^0.1.2:
   version "0.1.2"
-  resolved "https://registry.npmjs.org/universalify/-/universalify-0.1.2.tgz"
+  resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.1.2.tgz#b646f69be3942dabcecc9d6639c80dc105efaa66"
   integrity sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==
 
 unixify@^1.0.0:
