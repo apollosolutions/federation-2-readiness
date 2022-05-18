@@ -286,6 +286,12 @@ export default class AuditCommand extends Command {
     description: 'Optional. Path to a directory to store audit results.',
   });
 
+  includeDiagrams = Option.Boolean('--include-diagrams', {
+    required: false,
+    description: 'Optional. Include a visual .mmd file of the query plans. ' +
+        'There may be some issues with specific query plans.',
+  });
+
   async execute() {
     const spinner = ora();
     const client = await getClient(this.key, {
@@ -384,7 +390,7 @@ export default class AuditCommand extends Command {
         const diagramPathFed2 = join(this.out, `${name}-fed2.mmd`);
 
         // Write Mermaid diagrams
-        if (result.one) {
+        if (result.one && this.includeDiagrams) {
           // eslint-disable-next-line no-await-in-loop
           await writeFile(
               diagramPathFed1,
@@ -392,7 +398,7 @@ export default class AuditCommand extends Command {
               'utf-8',
           );
         }
-        if (result.two) {
+        if (result.two && this.includeDiagrams) {
           // eslint-disable-next-line no-await-in-loop
           await writeFile(
               diagramPathFed2,
