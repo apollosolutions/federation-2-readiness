@@ -91,17 +91,25 @@ function process(currentNode) {
 }
 
 /**
+ * @param {import("clipanion").BaseContext} context
+ * @param {string} queryName
  * @param {import("@apollo/query-planner").QueryPlan|import("@apollo/query-planner-1").QueryPlan} queryPlan
  * @return {string}
  */
-export function queryPlanToMermaid(queryPlan) {
+export function queryPlanToMermaid(context, queryName, queryPlan) {
   const queryPlanNode = queryPlan.node;
   if (!queryPlanNode) {
-    throw new Error('Invalid query plan');
+    context.stdout.write(`Invalid query plan for ${queryName}. Will not generate a visual diagram.\n`);
+    return '';
   }
 
-  return `
+  try {
+    return `
     graph TD
       ${process(queryPlanNode).nodeText}
   `.trim();
+  } catch (e) {
+    context.stdout.write(`Error processing query plan for ${queryName}. Will not generate a visual diagram.\n`);
+    return '';
+  }
 }
