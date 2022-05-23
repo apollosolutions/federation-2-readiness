@@ -3,7 +3,7 @@ import { mkdir, writeFile } from 'fs/promises';
 import { join } from 'path';
 import { Command, Option } from 'clipanion';
 import inquirer from 'inquirer';
-import { parse, print, printError } from 'graphql';
+import { parse, print } from 'graphql';
 import { diff } from 'jest-diff';
 import { serializeQueryPlan as serializeQueryPlan1 } from '@apollo/query-planner-1';
 import { serializeQueryPlan as serializeQueryPlan2 } from '@apollo/query-planner';
@@ -20,6 +20,7 @@ import { composeWithResolvedConfig as composeWithResolvedConfig2 } from '../fede
 import { getClient } from '../studio/index.js';
 import { queryPlanAudit } from '../federation/query-plan-audit.js';
 import { queryPlanToMermaid } from '../federation/queryPlanToMermaid.js';
+import { loadSupergraphInGateway } from '../federation/gateway.js';
 
 const FROM_OPTIONS = {
   'Last Hour': '-3600',
@@ -288,8 +289,9 @@ export default class AuditCommand extends Command {
 
   includeDiagrams = Option.Boolean('--include-diagrams', {
     required: false,
-    description: 'Optional. Include a visual .mmd file of the query plans. ' +
-        'There may be some issues with specific query plans.',
+    description:
+      'Optional. Include a visual .mmd file of the query plans. ' +
+      'There may be some issues with specific query plans.',
   });
 
   async execute() {
@@ -325,7 +327,9 @@ export default class AuditCommand extends Command {
       this.context.stdout.write(
         '💣 Schema did not compose with Federation v1\n',
       );
-      this.context.stderr.write(fed1.errors?.map(printError)?.join('\n\n'));
+      this.context.stderr.write(
+        fed1.errors?.map((e) => e.toString())?.join('\n\n'),
+      );
       this.context.stdout.write('');
       return;
     }
@@ -336,12 +340,44 @@ export default class AuditCommand extends Command {
       this.context.stdout.write(
         '💣 Schema did not compose with Federation v2\n',
       );
-      this.context.stdout.write(fed2.errors.map(printError).join('\n\n'));
+      this.context.stdout.write(
+        fed2.errors.map((e) => e.toString()).join('\n\n'),
+      );
       this.context.stdout.write('');
       return;
     }
 
     this.context.stdout.write('✅ Schema composes with Federation v2\n');
+
+    spinner.text = 'Attempting to load supergraphs in @apollo/gateway v2';
+    spinner.start();
+
+    const [fed1Gateway, fed2Gateway] = await Promise.all([
+      loadSupergraphInGateway(/** @type {string} */ (fed1.supergraphSdl)),
+      loadSupergraphInGateway(fed2.supergraphSdl),
+    ]);
+
+    spinner.stop();
+
+    if (!fed1Gateway.success) {
+      this.context.stdout.write(
+        '💣 Could not load Federation v1 supergraph in @apollo/gateway v2\n',
+      );
+      this.context.stdout.write(fed1Gateway.error.toString());
+      this.context.stdout.write('');
+    }
+
+    if (!fed2Gateway.success) {
+      this.context.stdout.write(
+        '💣 Could not load Federation v2 supergraph in @apollo/gateway v2\n',
+      );
+      this.context.stdout.write(fed2Gateway.error.toString());
+      this.context.stdout.write('');
+    }
+
+    if (!fed1Gateway.success || !fed2Gateway.success) {
+      return;
+    }
 
     const operations = await getOperations(
       client,
@@ -391,7 +427,11 @@ export default class AuditCommand extends Command {
 
         // Write Mermaid diagrams
         if (result.one && this.includeDiagrams) {
-          const mermaidFed1 = queryPlanToMermaid(this.context, diagramPathFed1, result.one);
+          const mermaidFed1 = queryPlanToMermaid(
+            this.context,
+            diagramPathFed1,
+            result.one,
+          );
           if (mermaidFed1) {
             // eslint-disable-next-line no-await-in-loop
             await writeFile(diagramPathFed1, mermaidFed1, 'utf-8');
@@ -399,7 +439,11 @@ export default class AuditCommand extends Command {
         }
 
         if (result.two && this.includeDiagrams) {
-          const mermaidFed2 = queryPlanToMermaid(this.context, diagramPathFed2, result.two);
+          const mermaidFed2 = queryPlanToMermaid(
+            this.context,
+            diagramPathFed2,
+            result.two,
+          );
           if (mermaidFed2) {
             // eslint-disable-next-line no-await-in-loop
             await writeFile(diagramPathFed2, mermaidFed2, 'utf-8');
