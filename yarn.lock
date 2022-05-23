@@ -33,10 +33,10 @@
     apollo-server-types "^3.0.2"
     lodash.xorby "^4.7.0"
 
-"@apollo/federation-internals@^2.0.0", "@apollo/federation-internals@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@apollo/federation-internals/-/federation-internals-2.0.1.tgz#582bbc732015ec63117da958e79ded7495fbbf79"
-  integrity sha512-as2lL0tChwQx3PgBKQ8hELal2paBFsbucXSba+Gi84ZP1wGtYtl5kJmE7DVImsC+/CAVjEFWM7aWQGJg6Im8Ow==
+"@apollo/federation-internals@^2.0.1", "@apollo/federation-internals@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@apollo/federation-internals/-/federation-internals-2.0.3.tgz#f5b798dbd2047539a4885a7821d00559c1a4a245"
+  integrity sha512-V/0UviEWyHJJMU1LXHXVlulT0rSs2aouwCg1mmXYZNn2HNgiT9RSZZ9OMGPcEJRZkDfUgdrMdkmv1NiypFv0eQ==
   dependencies:
     "@apollo/core-schema" "~0.3.0"
     chalk "^4.1.0"
