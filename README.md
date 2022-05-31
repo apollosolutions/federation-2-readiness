@@ -8,6 +8,8 @@ Check your federated schema for backward-compatibility with [Federation 2](https
 
 ### Basic Usage
 
+Requires a user API key (created in [Personal Settings](https://studio.apollographql.com/user-settings/api-keys)), not a graph API key.
+
 ```sh
 export APOLLO_KEY=<your apollo api key>
 npx github:@apollosolutions/federation-2-readiness
