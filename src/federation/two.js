@@ -1,6 +1,7 @@
 import { compose } from '@apollo/composition';
 import {
   buildSubgraph,
+  buildSupergraphSchema,
   errorCauses,
   operationFromDocument,
   Subgraphs,
@@ -54,6 +55,23 @@ export async function composeWithResolvedConfig(config) {
  */
 export async function queryPlan(schema, operationDoc, operationName) {
   const documentNode = parse(operationDoc);
+  const operation = operationFromDocument(schema, documentNode, operationName);
+  const queryPlanner = new QueryPlanner(schema);
+  return queryPlanner.buildQueryPlan(operation);
+}
+
+/**
+ * @param {string} supergraphSdl
+ * @param {string} operationDoc
+ * @param {string} [operationName]
+ */
+export async function queryPlanWithFed1Schema(
+  supergraphSdl,
+  operationDoc,
+  operationName,
+) {
+  const documentNode = parse(operationDoc);
+  const [schema] = buildSupergraphSchema(supergraphSdl);
   const operation = operationFromDocument(schema, documentNode, operationName);
   const queryPlanner = new QueryPlanner(schema);
   return queryPlanner.buildQueryPlan(operation);
