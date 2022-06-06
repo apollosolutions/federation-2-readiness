@@ -148,16 +148,55 @@ function generateReport(result, graphRef) {
       ? '🎉 No difference in query plans'
       : '💣 Query plans differ',
     '',
-    'Diff',
-    '----',
-    'Diff after query plan normalization (field sorting, etc.)',
-    '```diff',
-    diff(
-      serializeQueryPlan1(result.normalizedOne),
-      serializeQueryPlan2(result.normalizedTwo),
-      COLORS,
-    ),
-    '```',
+
+    ...(!result.planner1MatchesPlanner2
+      ? [
+          'Before and After Migration Diff',
+          '-------------------------------',
+          'This shows the difference between:',
+          '',
+          '* Using a **Federation 1** supergraph to generate query plans in **Apollo Gateway 0.x**',
+          '* Using a **Federation 2** supergraph to generate query plans in **Apollo Gateway 2**',
+          '',
+          'This simulates the changes in query planning after completing the Federation 2 migration',
+          '',
+          'The diff is calculated after after query plan normalization (field sorting, etc.)',
+          '',
+          '```diff',
+          diff(
+            serializeQueryPlan1(result.normalizedOne),
+            serializeQueryPlan2(result.normalizedTwo),
+            COLORS,
+          ),
+          '```',
+        ]
+      : []),
+
+    '',
+    ...(!result.planner2MatchesBothSupergraphs
+      ? [
+          'In-progress Migration Diff',
+          '--------------------------',
+          'This shows the difference between:',
+          '',
+          '* Using a **Federation 1** supergraph to generate query plans in Apollo Gateway 2',
+          '* Using a **Federation 2** supergraph to generate query plans in Apollo Gateway 2',
+          '',
+          'This simulates the changes in query planning after upgrading the Gateway 2.0 but before',
+          'changing the build configuration to use Federation 2 composition',
+          '',
+          'The diff is calculated after after query plan normalization (field sorting, etc.)',
+          '',
+          '```diff',
+          diff(
+            serializeQueryPlan1(result.normalizedTwoFromOne),
+            serializeQueryPlan2(result.normalizedTwo),
+            COLORS,
+          ),
+          '```',
+        ]
+      : []),
+
     '',
     'Operation',
     '---------',
@@ -171,8 +210,14 @@ function generateReport(result, graphRef) {
     serializeQueryPlan1(result.one),
     '```',
     '',
-    'Federation 2 Query Plan',
-    '-----------------------',
+    'Federation 2 Query Plan with Federation 1 Supergraph',
+    '----------------------------------------------------',
+    '```',
+    serializeQueryPlan2(result.twoFromOne),
+    '```',
+    '',
+    'Federation 2 Query Plan with Federation 2 Supergraph',
+    '----------------------------------------------------',
     '```',
     serializeQueryPlan2(result.two),
     '```',
@@ -204,28 +249,47 @@ function generateFailureReport(result, graphRef) {
     '='.repeat(title.length),
     `https://studio.apollographql.com/graph/${graph}/operations?query=${result.queryId}&queryName=${result.queryName}&variant=${variant}`,
     '',
-    `* Federation v1 Query Plan: ${result.one ? '✅' : '❌'}`,
-    `* Federation v2 Query Plan: ${result.two ? '✅' : '❌'}`,
+    `* Federation 1 supergraph with Apollo Gateway 0.x: ${
+      result.one ? '✅' : '❌'
+    }`,
+    `* Federation 1 supergraph with Apollo Gateway 2: ${
+      result.twoFromOne ? '✅' : '❌'
+    }`,
+    `* Federation 2 supergraph with Apollo Gateway 2: ${
+      result.two ? '✅' : '❌'
+    }`,
+
     ...(result.oneError
       ? [
           '',
-          'Federation v1 Error',
-          '--------------------',
+          'Error: Federation 1 supergraph with Apollo Gateway 0.x',
+          '------------------------------------------------------',
           '',
           result.oneError.message,
+          '',
+        ]
+      : []),
+    ...(result.twoFromOneError
+      ? [
+          '',
+          'Error: Federation 1 supergraph with Apollo Gateway 2',
+          '----------------------------------------------------',
+          '',
+          result.twoFromOneError.message,
           '',
         ]
       : []),
     ...(result.twoError
       ? [
           '',
-          'Federation v2 Error',
-          '--------------------',
+          'Error: Federation 2 supergraph with Apollo Gateway 2',
+          '----------------------------------------------------',
           '',
           result.twoError.message,
           '',
         ]
       : []),
+
     'Operation',
     '---------',
     '```graphql',
@@ -391,8 +455,8 @@ export default class AuditCommand extends Command {
     spinner.start();
 
     const results = await queryPlanAudit({
-      fed1Schema: fed1.schema,
-      fed2Schema: fed2.schema,
+      fed1Schema: fed1,
+      fed2Schema: fed2,
       operations: validOperations,
     });
 
