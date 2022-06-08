@@ -1,3 +1,4 @@
+import { GraphQLError, parse, validate, print } from 'graphql';
 import { queryPlan as queryPlan1 } from './one.js';
 import { queryPlan as queryPlan2, queryPlanWithFed1Schema } from './two.js';
 import { diffQueryPlans } from './diff.js';
@@ -21,10 +22,98 @@ function assert(condition, message) {
  */
 
 /**
- * @param {{ fed1Schema: import('./one.js').CompositionResult; fed2Schema: import('@apollo/composition').CompositionSuccess; operations: Operation[] }} options
+ * @param {import('@apollo/query-planner').QueryPlan} queryPlan
+ */
+function allFetchNodes(queryPlan) {
+  /** @type {import('@apollo/query-planner').FetchNode[]} */
+  const fetchNodes = [];
+
+  /**
+   * @param {import('@apollo/query-planner').PlanNode} node
+   */
+  function recurse(node) {
+    switch (node.kind) {
+      case 'Fetch':
+        fetchNodes.push(node);
+        break;
+      case 'Flatten':
+        recurse(node.node);
+        break;
+      case 'Parallel':
+      case 'Sequence':
+        node.nodes.map((n) => recurse(n));
+        node.nodes.map((n) => recurse(n));
+        break;
+      default:
+        throw new Error('not possible');
+    }
+  }
+
+  if (queryPlan.node) {
+    recurse(queryPlan.node);
+  }
+
+  return fetchNodes;
+}
+
+/**
+ * @param {import('@apollo/query-planner').FetchNode} fetchNode
+ * @param {Map<string, import("graphql").GraphQLSchema>} subgraphSchemas
+ */
+function validateFetchNode(fetchNode, subgraphSchemas) {
+  const subgraphSchema = subgraphSchemas.get(fetchNode.serviceName);
+  if (!subgraphSchema) {
+    return [
+      new GraphQLError(
+        `fetch node calls missing subgraph ${fetchNode.serviceName}`,
+        {
+          extensions: {
+            subgraph: fetchNode.serviceName,
+          },
+        },
+      ),
+    ];
+  }
+
+  const errors = validate(subgraphSchema, parse(fetchNode.operation));
+  return errors.map(
+    (err) =>
+      new GraphQLError(err.message, {
+        ...err,
+        extensions: {
+          ...err.extensions,
+          subgraph: fetchNode.serviceName,
+          operation: print(parse(fetchNode.operation)),
+        },
+      }),
+  );
+}
+
+/**
+ * @param {import('@apollo/query-planner').QueryPlan} queryPlan
+ * @param {Map<string, import("graphql").GraphQLSchema>} subgraphSchemas
+ */
+function validateQueryPlan(queryPlan, subgraphSchemas) {
+  return allFetchNodes(queryPlan).flatMap((fetchNode) =>
+    validateFetchNode(fetchNode, subgraphSchemas),
+  );
+}
+
+/**
+ * @param {{
+ *  fed1Schema: import('./one.js').CompositionResult;
+ *  fed2Schema: import('@apollo/composition').CompositionSuccess;
+ *  operations: Operation[];
+ *  subgraphSchemas: Map<string, import("graphql").GraphQLSchema>;
+ * }} options
  * @returns {Promise<AuditResult[]>}
  */
-export async function queryPlanAudit({ fed1Schema, fed2Schema, operations }) {
+export async function queryPlanAudit({
+  fed1Schema,
+  fed2Schema,
+  operations,
+  subgraphSchemas,
+}) {
   return Promise.all(
     operations.map(async (op) => {
       assert(fed1Schema.schema, 'federation 1 composition unsuccessful');
@@ -80,6 +169,12 @@ export async function queryPlanAudit({ fed1Schema, fed2Schema, operations }) {
           normalizedTwo,
         );
 
+        const twoFetchErrors = validateQueryPlan(two, subgraphSchemas);
+        const twoFromOneFetchErrors = validateQueryPlan(
+          twoFromOne,
+          subgraphSchemas,
+        );
+
         return {
           type: 'SUCCESS',
           queryPlansMatch:
@@ -92,6 +187,8 @@ export async function queryPlanAudit({ fed1Schema, fed2Schema, operations }) {
           normalizedOne,
           normalizedTwo,
           normalizedTwoFromOne,
+          twoFetchErrors,
+          twoFromOneFetchErrors,
           ...op,
         };
       }

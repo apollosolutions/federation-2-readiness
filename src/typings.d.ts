@@ -12,6 +12,7 @@ import {
 } from '@apollo/query-planner-1';
 import { QueryPlan as QueryPlan_1 } from '@apollo/query-planner-1';
 import { QueryPlan as QueryPlan_2 } from '@apollo/query-planner';
+import { GraphQLError } from 'graphql';
 
 interface Operation {
   queryId: string;
@@ -34,6 +35,8 @@ type AuditResult =
       queryId: string;
       queryName: string | undefined;
       querySignature: string;
+      twoFetchErrors: GraphQLError[];
+      twoFromOneFetchErrors: GraphQLError[];
     }
   | {
       type: 'FAILURE';
