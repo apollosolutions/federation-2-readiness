@@ -8,6 +8,7 @@ import { diff } from 'jest-diff';
 import { serializeQueryPlan as serializeQueryPlan1 } from '@apollo/query-planner-1';
 import { serializeQueryPlan as serializeQueryPlan2 } from '@apollo/query-planner';
 import ora from 'ora';
+import { buildSubgraphSchema } from '@apollo/subgraph';
 import {
   chooseVariant,
   getConfig,
@@ -144,11 +145,50 @@ function generateReport(result, graphRef) {
     '='.repeat(title.length),
     `https://studio.apollographql.com/graph/${graph}/operations?query=${result.queryId}&queryName=${result.queryName}&variant=${variant}`,
     '',
+
+    result.twoFromOneFetchErrors.length
+      ? '💣 Federation 1 supergraph query plan has subgraph fetch nodes that will fail'
+      : '🎉 Federation 1 supergraph query plan is valid',
+    result.twoFetchErrors.length
+      ? '💣 Federation 2 supergraph query plan has subgraph fetch nodes that will fail'
+      : '🎉 Federation 2 supergraph query plan is valid',
     result.queryPlansMatch
       ? '🎉 No difference in query plans'
-      : '💣 Query plans differ',
-    '',
+      : '👀 Query plans differ',
 
+    '',
+    ...(result.twoFromOneFetchErrors.length
+      ? [
+          'Subgraph fetch errors (Federation 1 supergraph)',
+          '-----------------------------------------------',
+          ...result.twoFromOneFetchErrors.flatMap((err) => [
+            `* [${err.extensions.subgraph}] ${err.toString()}`,
+            '    ```graphql',
+            ...err.extensions.operation
+              .split('\n')
+              .map((line) => `    ${line}`),
+            '    ```',
+          ]),
+        ]
+      : []),
+
+    '',
+    ...(result.twoFetchErrors.length
+      ? [
+          'Subgraph fetch errors (Federation 2 supergraph)',
+          '-----------------------------------------------',
+          ...result.twoFetchErrors.flatMap((err) => [
+            `* [${err.extensions.subgraph}] ${err.toString()}`,
+            '    ```graphql',
+            ...err.extensions.operation
+              .split('\n')
+              .map((line) => `    ${line}`),
+            '    ```',
+          ]),
+        ]
+      : []),
+
+    '',
     ...(!result.planner1MatchesPlanner2
       ? [
           'Before and After Migration Diff',
@@ -308,9 +348,14 @@ export default class AuditCommand extends Command {
       Performs a series of tasks on a federated graph:
       1. Ensures that it composes using Federation 1.
       2. Ensures that it composes using Federation 2.
-      3. Fetches recent operations from Apollo Studio.
-      4. Generates query plans for each operation using both the Federation 1
-         and Federation 2 schemas and compares the results.
+      3. Ensures that both supergraphs load correctly in Gateway 2.0
+      4. Fetches recent operations from Apollo Studio.
+      5. Generates query plans using:
+        1. The Federation 1 supergraph with Gateway 0.x.
+        2. The Federation 1 supergraph with Gateway 2.0.
+        3. The Federation 2 supergraph with Gateway 2.0.
+      6. Validates that fetch nodes in each 2.0 query plan (using supergraphs
+         from Fed 1 and Fed2) are valid against subgraphs.
     `,
     examples: [
       ['Get basic details on composition and query plans', '$0'],
@@ -454,10 +499,17 @@ export default class AuditCommand extends Command {
     spinner.text = `Generating query plans for ${validOperations.length} operations`;
     spinner.start();
 
+    const subgraphSchemas = new Map(
+      Object.entries(resolvedConfig.subgraphs).map(
+        ([name, { schema: sdl }]) => [name, buildSubgraphSchema(parse(sdl))],
+      ),
+    );
+
     const results = await queryPlanAudit({
       fed1Schema: fed1,
       fed2Schema: fed2,
       operations: validOperations,
+      subgraphSchemas,
     });
 
     spinner.stop();
@@ -467,13 +519,32 @@ export default class AuditCommand extends Command {
       (r) => r.type === 'SUCCESS' && r.queryPlansMatch,
     ).length;
 
+    const twoFetchErrors = results.filter(
+      (r) => r.type === 'SUCCESS' && r.twoFetchErrors.length,
+    );
+    const twoFromOneFetchErrors = results.filter(
+      (r) => r.type === 'SUCCESS' && r.twoFromOneFetchErrors.length,
+    );
+
     this.context.stdout.write('-----------------------------------\n');
     this.context.stdout.write(`✅ Operations audited: ${total}\n`);
     this.context.stdout.write(`🏆 Operations that match: ${matched}\n`);
 
     if (matched < total) {
       this.context.stdout.write(
-        `❌ Operations with differences: ${total - matched}\n`,
+        `👀 Operations with differences: ${total - matched}\n`,
+      );
+    }
+
+    if (twoFromOneFetchErrors.length) {
+      this.context.stdout.write(
+        `❌ Query plans with invalid subgraph fetches (Fed 1 Supergraph): ${twoFromOneFetchErrors.length}\n`,
+      );
+    }
+
+    if (twoFetchErrors.length) {
+      this.context.stdout.write(
+        `❌ Query plans with invalid subgraph fetches (Fed 2 Supergraph): ${twoFetchErrors.length}\n`,
       );
     }
 
@@ -514,7 +585,13 @@ export default class AuditCommand extends Command {
           }
         }
 
-        if (result.type === 'SUCCESS' && !result.queryPlansMatch) {
+        const successReport =
+          result.type === 'SUCCESS' &&
+          (!result.queryPlansMatch ||
+            result.twoFetchErrors.length ||
+            result.twoFromOneFetchErrors.length);
+
+        if (successReport) {
           // eslint-disable-next-line no-await-in-loop
           await writeFile(
             path,
