@@ -19,34 +19,36 @@ interface Operation {
   querySignature: string;
 }
 
-type AuditResult =
-  | {
-      type: 'SUCCESS';
-      queryPlansMatch: boolean;
-      planner1MatchesPlanner2: boolean;
-      planner2MatchesBothSupergraphs: boolean;
-      one: QueryPlan_1;
-      two: QueryPlan_2;
-      twoFromOne: QueryPlan_2;
-      normalizedOne: QueryPlan_1;
-      normalizedTwo: QueryPlan_2;
-      normalizedTwoFromOne: QueryPlan_2;
-      queryId: string;
-      queryName: string | undefined;
-      querySignature: string;
-    }
-  | {
-      type: 'FAILURE';
-      queryId: string;
-      queryName: string | undefined;
-      querySignature: string;
-      one?: QueryPlan_1 | undefined;
-      two?: QueryPlan_2 | undefined;
-      twoFromOne?: QueryPlan_2 | undefined;
-      oneError?: Error | undefined;
-      twoError?: Error | undefined;
-      twoFromOneError?: Error | undefined;
-    };
+interface AuditResultSuccess {
+  type: 'SUCCESS';
+  queryPlansMatch: boolean;
+  planner1MatchesPlanner2: boolean;
+  planner2MatchesBothSupergraphs: boolean;
+  one: QueryPlan_1;
+  two: QueryPlan_2;
+  twoFromOne: QueryPlan_2;
+  normalizedOne: QueryPlan_1;
+  normalizedTwo: QueryPlan_2;
+  normalizedTwoFromOne: QueryPlan_2;
+  queryId: string;
+  queryName: string | undefined;
+  querySignature: string;
+}
+
+interface AuditResultFailure {
+  type: 'FAILURE';
+  queryId: string;
+  queryName: string | undefined;
+  querySignature: string;
+  one?: QueryPlan_1 | undefined;
+  two?: QueryPlan_2 | undefined;
+  twoFromOne?: QueryPlan_2 | undefined;
+  oneError?: Error | undefined;
+  twoError?: Error | undefined;
+  twoFromOneError?: Error | undefined;
+}
+
+type AuditResult = AuditResultSuccess | AuditResultFailure;
 
 interface QueryPlanVisitor2 {
   Fetch?: (node: FetchNode) => FetchNode | undefined;

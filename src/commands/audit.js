@@ -8,6 +8,7 @@ import { diff } from 'jest-diff';
 import { serializeQueryPlan as serializeQueryPlan1 } from '@apollo/query-planner-1';
 import { serializeQueryPlan as serializeQueryPlan2 } from '@apollo/query-planner';
 import ora from 'ora';
+import { SingleBar, Presets } from 'cli-progress';
 import {
   chooseVariant,
   getConfig,
@@ -451,16 +452,24 @@ export default class AuditCommand extends Command {
 
     const validOperations = operations.filter(validateOperation);
 
-    spinner.text = `Generating query plans for ${validOperations.length} operations`;
-    spinner.start();
+    this.context.stdout.write(
+      `Generating query plans for ${validOperations.length} operations\n`,
+    );
+
+    const progress = new SingleBar({}, Presets.shades_classic);
+    progress.start(validOperations.length, 0);
 
     const results = await queryPlanAudit({
       fed1Schema: fed1,
       fed2Schema: fed2,
       operations: validOperations,
+      progressCallback: (count) => {
+        progress.update(count);
+      },
     });
 
-    spinner.stop();
+    progress.update(validOperations.length);
+    progress.stop();
 
     const total = validOperations.length;
     const matched = results.filter(
