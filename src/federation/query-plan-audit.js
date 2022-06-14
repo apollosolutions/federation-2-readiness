@@ -21,82 +21,108 @@ function assert(condition, message) {
  */
 
 /**
- * @param {{ fed1Schema: import('./one.js').CompositionResult; fed2Schema: import('@apollo/composition').CompositionSuccess; operations: Operation[] }} options
+ * @param {{
+ *  fed1Schema: import('./one.js').CompositionResult;
+ *  fed2Schema: import('@apollo/composition').CompositionSuccess;
+ *  operations: Operation[];
+ *  progressCallback: (_: number) => void
+ * }} options
  * @returns {Promise<AuditResult[]>}
  */
-export async function queryPlanAudit({ fed1Schema, fed2Schema, operations }) {
-  return Promise.all(
-    operations.map(async (op) => {
-      assert(fed1Schema.schema, 'federation 1 composition unsuccessful');
-      assert(fed1Schema.supergraphSdl, 'federation 1 composition unsuccessful');
+export async function queryPlanAudit({
+  fed1Schema,
+  fed2Schema,
+  operations,
+  progressCallback,
+}) {
+  /**
+   * @param {Operation} op
+   */
+  async function plan(op) {
+    assert(fed1Schema.schema, 'federation 1 composition unsuccessful');
+    assert(fed1Schema.supergraphSdl, 'federation 1 composition unsuccessful');
 
-      const [
-        { one, oneError },
-        { two, twoError },
-        { twoFromOne, twoFromOneError },
-      ] = await Promise.all([
-        queryPlan1(fed1Schema.schema, op.querySignature, op.queryName).then(
-          (qp) => ({ one: qp, oneError: undefined }),
-          (e) => ({ one: undefined, oneError: e }),
-        ),
+    const [
+      { one, oneError },
+      { two, twoError },
+      { twoFromOne, twoFromOneError },
+    ] = await Promise.all([
+      queryPlan1(fed1Schema.schema, op.querySignature, op.queryName).then(
+        (qp) => ({ one: qp, oneError: undefined }),
+        (e) => ({ one: undefined, oneError: e }),
+      ),
 
-        queryPlan2(fed2Schema.schema, op.querySignature, op.queryName).then(
-          (qp) => ({ two: qp, twoError: undefined }),
-          (e) => ({ two: undefined, twoError: e }),
-        ),
+      queryPlan2(fed2Schema.schema, op.querySignature, op.queryName).then(
+        (qp) => ({ two: qp, twoError: undefined }),
+        (e) => ({ two: undefined, twoError: e }),
+      ),
 
-        queryPlanWithFed1Schema(
-          fed1Schema.supergraphSdl,
-          op.querySignature,
-          op.queryName,
-        ).then(
-          (qp) => ({ twoFromOne: qp, twoFromOneError: undefined }),
-          (e) => ({ twoFromOne: undefined, twoFromOneError: e }),
-        ),
-      ]);
+      queryPlanWithFed1Schema(
+        fed1Schema.supergraphSdl,
+        op.querySignature,
+        op.queryName,
+      ).then(
+        (qp) => ({ twoFromOne: qp, twoFromOneError: undefined }),
+        (e) => ({ twoFromOne: undefined, twoFromOneError: e }),
+      ),
+    ]);
 
-      if (oneError || twoError || twoFromOneError) {
-        return {
-          type: 'FAILURE',
-          ...op,
-          one,
-          two,
-          oneError,
-          twoError,
-          twoFromOneError,
-        };
-      }
+    if (oneError || twoError || twoFromOneError) {
+      /** @type {import('../typings.js').AuditResultFailure} */
+      return {
+        type: /** @type {const} */ ('FAILURE'),
+        ...op,
+        one,
+        two,
+        oneError,
+        twoError,
+        twoFromOneError,
+      };
+    }
 
-      if (one && two && twoFromOne) {
-        const normalizedOne = normalizeQueryPlan1(one);
-        const normalizedTwo = normalizeQueryPlan2(two);
-        const normalizedTwoFromOne = normalizeQueryPlan2(twoFromOne);
-        const { differences: planner1Planner2 } = diffQueryPlans(
-          normalizedOne,
-          normalizedTwo,
-        );
-        const { differences: planner2BothSupergraphs } = diffQueryPlans(
-          normalizedTwoFromOne,
-          normalizedTwo,
-        );
+    if (one && two && twoFromOne) {
+      const normalizedOne = normalizeQueryPlan1(one);
+      const normalizedTwo = normalizeQueryPlan2(two);
+      const normalizedTwoFromOne = normalizeQueryPlan2(twoFromOne);
+      const { differences: planner1Planner2 } = diffQueryPlans(
+        normalizedOne,
+        normalizedTwo,
+      );
+      const { differences: planner2BothSupergraphs } = diffQueryPlans(
+        normalizedTwoFromOne,
+        normalizedTwo,
+      );
 
-        return {
-          type: 'SUCCESS',
-          queryPlansMatch:
-            planner1Planner2 === 0 && planner2BothSupergraphs === 0,
-          planner1MatchesPlanner2: planner1Planner2 === 0,
-          planner2MatchesBothSupergraphs: planner2BothSupergraphs === 0,
-          one,
-          two,
-          twoFromOne,
-          normalizedOne,
-          normalizedTwo,
-          normalizedTwoFromOne,
-          ...op,
-        };
-      }
+      /** @type {import('../typings.js').AuditResultSuccess} */
+      return {
+        type: /** @type {const} */ ('SUCCESS'),
+        queryPlansMatch:
+          planner1Planner2 === 0 && planner2BothSupergraphs === 0,
+        planner1MatchesPlanner2: planner1Planner2 === 0,
+        planner2MatchesBothSupergraphs: planner2BothSupergraphs === 0,
+        one,
+        two,
+        twoFromOne,
+        normalizedOne,
+        normalizedTwo,
+        normalizedTwoFromOne,
+        ...op,
+      };
+    }
 
-      return { type: 'FAILURE', ...op };
-    }),
-  );
+    /** @type {import('../typings.js').AuditResultFailure} */
+    return { type: /** @type {const} */ ('FAILURE'), ...op };
+  }
+
+  /** @type {AuditResult[]} */
+  const results = [];
+
+  let i = 0;
+  for await (const op of operations) {
+    progressCallback(i);
+    results.push(await plan(op));
+    i += 1;
+  }
+
+  return results;
 }
