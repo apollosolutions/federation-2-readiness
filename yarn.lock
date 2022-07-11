@@ -33,7 +33,7 @@
     apollo-server-types "^3.0.2"
     lodash.xorby "^4.7.0"
 
-"@apollo/federation-internals@^2.0.1", "@apollo/federation-internals@^2.0.3", "@apollo/federation-internals@^2.0.5":
+"@apollo/federation-internals@^2.0.3", "@apollo/federation-internals@^2.0.5":
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/@apollo/federation-internals/-/federation-internals-2.0.5.tgz#a96d6d73247e9a3deac6851937c6b8bcc632ced4"
   integrity sha512-UbkNNOtzp1N14ZR6ynjwctF6rXEvAnlDz527cUYN0mkYkyH8v0RZNA1WfhVdcPWsTpjuvAR7Q5cDEf3e2dYcEQ==
@@ -121,12 +121,12 @@
   resolved "https://registry.yarnpkg.com/@apollo/subgraph/-/subgraph-0.4.1.tgz#7bc4f0a133a8558607b99f83138cbb313fe39b42"
   integrity sha512-4tm9sY/aYGwB20xccVRJiLupEpEhXBbhbJNlpqigtXnE6A5uQvvKn7qgDdZn5fZr6rw4kX5N9lLSliU03QwTfA==
 
-"@apollo/subgraph@^2.0.0":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@apollo/subgraph/-/subgraph-2.0.1.tgz#ae638802c9841fc3189b9e8545a93bfab0378c90"
-  integrity sha512-GHfJ+W7A2yiES+7nKlPFcjDuXFbj/hgGADVcNo+3HUSHOR8l+7gUhn/7pED0bhUPO5Dr2yEgz7aA39MiQ6PHTQ==
+"@apollo/subgraph@^2.0.5":
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/@apollo/subgraph/-/subgraph-2.0.5.tgz#79bd284da1b9ba1196e7de9973654c878f21ae88"
+  integrity sha512-bnxxoYmlalYJ5wiE2iOYae6bc9fHKik0zOHGcfTLpIm/T3l+1J0Gj5QIVYOs7u/agduo3VGjm8MQbvrtNHJExg==
   dependencies:
-    "@apollo/federation-internals" "^2.0.1"
+    "@apollo/federation-internals" "^2.0.5"
 
 "@apollo/utils.createhash@^1.0.0":
   version "1.1.0"
