@@ -1962,10 +1962,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@urql/core@^2.4.1":
-  version "2.4.4"
-  resolved "https://registry.yarnpkg.com/@urql/core/-/core-2.4.4.tgz#29f1d03cc439134259761e70a78ae20302c3d7fe"
-  integrity sha512-TD+OS7jG1Ts6QkpU0TZ85i/vu40r71GF0QQFDhnWFtgkHcNwnpkIwWBMa72AR3j2imBTPpk61e/xb39uM/t37A==
+"@urql/core@^2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@urql/core/-/core-2.6.0.tgz#1ce8b3a471312986378ce42ea800478595239315"
+  integrity sha512-JuIbzDu2oASSe+m5u410ceqWQGTF6QK5W/UZaHuzQX+I2wX4aVdPN/NeZnaFFqG3UYw3+ttFHpQK0vrsU6QLFw==
   dependencies:
     "@graphql-typed-document-node/core" "^3.1.1"
     wonka "^4.0.14"
