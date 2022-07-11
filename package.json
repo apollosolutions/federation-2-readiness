@@ -22,7 +22,7 @@
     "check:tcs": "yarn tsc"
   },
   "dependencies": {
-    "@apollo/composition": "^2.0.0",
+    "@apollo/composition": "^2.0.5",
     "@apollo/federation-1": "npm:@apollo/federation@0.36.1",
     "@apollo/federation-internals": "^2.0.3",
     "@apollo/gateway": "^2.0.3",
