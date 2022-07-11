@@ -8,7 +8,7 @@
   "license": "MIT",
   "type": "module",
   "engines": {
-    "node": ">= 14"
+    "node": ">= 16"
   },
   "scripts": {
     "codegen": "graphql-codegen --config codegen.yml",
