@@ -101,7 +101,7 @@ export default class ExtractSubgraphCommand extends Command {
 
     const config = await readConfig(this.config);
 
-    const graphRef = config.experimental_fed2readiness.graph_ref;
+    const graphRef = config.experimental_fed2readiness.graphref;
 
     const subgraphsOfInterest = Object.fromEntries(
       Object.entries(config.subgraphs).filter(

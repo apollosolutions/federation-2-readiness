@@ -1,7 +1,7 @@
 export interface Subgraph {
   routing_url: string | null | undefined;
   schema:
-    | { graph_ref: string; subgraph: string }
+    | { graphref: string; subgraph: string }
     | { file: string }
     | { subgraph_url: string };
 }
@@ -12,7 +12,7 @@ export interface Config {
   };
 
   experimental_fed2readiness: {
-    graph_ref: string;
+    graphref: string;
   };
 }
 
