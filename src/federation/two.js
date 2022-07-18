@@ -53,7 +53,7 @@ export async function composeWithResolvedConfig(config) {
  * @param {string} operationDoc
  * @param {string} [operationName]
  */
-export async function queryPlan(schema, operationDoc, operationName) {
+export function queryPlan(schema, operationDoc, operationName) {
   const documentNode = parse(operationDoc);
   const operation = operationFromDocument(schema, documentNode, operationName);
   const queryPlanner = new QueryPlanner(schema);
@@ -65,7 +65,7 @@ export async function queryPlan(schema, operationDoc, operationName) {
  * @param {string} operationDoc
  * @param {string} [operationName]
  */
-export async function queryPlanWithFed1Schema(
+export function queryPlanWithFed1Schema(
   supergraphSdl,
   operationDoc,
   operationName,

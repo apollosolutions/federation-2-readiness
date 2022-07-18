@@ -42,7 +42,7 @@ export async function composeWithResolvedConfig(config) {
  * @param {string} operationDoc
  * @param {string} [operationName]
  */
-export async function queryPlan(schema, operationDoc, operationName) {
+export function queryPlan(schema, operationDoc, operationName) {
   const documentNode = parse(operationDoc);
   const operationContext = buildOperationContext(
     schema,
