@@ -27,9 +27,9 @@ function assert(condition, message) {
  *  operations: Operation[];
  *  progressCallback: (_: number) => void
  * }} options
- * @returns {Promise<AuditResult[]>}
+ * @returns {AuditResult[]}
  */
-export async function queryPlanAudit({
+export function queryPlanAudit({
   fed1Schema,
   fed2Schema,
   operations,
@@ -37,35 +37,59 @@ export async function queryPlanAudit({
 }) {
   /**
    * @param {Operation} op
+   * @returns {AuditResult}
    */
-  async function plan(op) {
+  function plan(op) {
     assert(fed1Schema.schema, 'federation 1 composition unsuccessful');
     assert(fed1Schema.supergraphSdl, 'federation 1 composition unsuccessful');
 
-    const [
-      { one, oneError },
-      { two, twoError },
-      { twoFromOne, twoFromOneError },
-    ] = await Promise.all([
-      queryPlan1(fed1Schema.schema, op.querySignature, op.queryName).then(
-        (qp) => ({ one: qp, oneError: undefined }),
-        (e) => ({ one: undefined, oneError: e }),
-      ),
+    const { one, oneError } = (() => {
+      try {
+        const qp = queryPlan1(
+          fed1Schema.schema,
+          op.querySignature,
+          op.queryName,
+        );
+        return { one: qp, oneError: undefined };
+      } catch (e) {
+        return {
+          one: undefined,
+          oneError: /** @type {import("graphql").GraphQLError} */ (e),
+        };
+      }
+    })();
 
-      queryPlan2(fed2Schema.schema, op.querySignature, op.queryName).then(
-        (qp) => ({ two: qp, twoError: undefined }),
-        (e) => ({ two: undefined, twoError: e }),
-      ),
+    const { two, twoError } = (() => {
+      try {
+        const qp = queryPlan2(
+          fed2Schema.schema,
+          op.querySignature,
+          op.queryName,
+        );
+        return { two: qp, twoError: undefined };
+      } catch (e) {
+        return {
+          two: undefined,
+          twoError: /** @type {import("graphql").GraphQLError} */ (e),
+        };
+      }
+    })();
 
-      queryPlanWithFed1Schema(
-        fed1Schema.supergraphSdl,
-        op.querySignature,
-        op.queryName,
-      ).then(
-        (qp) => ({ twoFromOne: qp, twoFromOneError: undefined }),
-        (e) => ({ twoFromOne: undefined, twoFromOneError: e }),
-      ),
-    ]);
+    const { twoFromOne, twoFromOneError } = (() => {
+      try {
+        const qp = queryPlanWithFed1Schema(
+          fed1Schema.supergraphSdl,
+          op.querySignature,
+          op.queryName,
+        );
+        return { twoFromOne: qp, twoFromOneError: undefined };
+      } catch (e) {
+        return {
+          twoFromOne: undefined,
+          twoFromOneError: /** @type {import("graphql").GraphQLError} */ (e),
+        };
+      }
+    })();
 
     if (oneError || twoError || twoFromOneError) {
       /** @type {import('../typings.js').AuditResultFailure} */
@@ -118,9 +142,9 @@ export async function queryPlanAudit({
   const results = [];
 
   let i = 0;
-  for await (const op of operations) {
+  for (const op of operations) {
     progressCallback(i);
-    results.push(await plan(op));
+    results.push(plan(op));
     i += 1;
   }
 

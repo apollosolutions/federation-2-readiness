@@ -459,7 +459,7 @@ export default class AuditCommand extends Command {
     const progress = new SingleBar({}, Presets.shades_classic);
     progress.start(validOperations.length, 0);
 
-    const results = await queryPlanAudit({
+    const results = queryPlanAudit({
       fed1Schema: fed1,
       fed2Schema: fed2,
       operations: validOperations,
