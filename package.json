@@ -22,13 +22,13 @@
     "check:tcs": "yarn tsc"
   },
   "dependencies": {
-    "@apollo/composition": "^2.0.0",
+    "@apollo/composition": "2.0.0",
     "@apollo/federation-1": "npm:@apollo/federation@0.36.1",
-    "@apollo/federation-internals": "^2.0.3",
-    "@apollo/gateway": "^2.0.5",
-    "@apollo/query-planner": "^2.0.0",
+    "@apollo/federation-internals": "2.0.0",
+    "@apollo/gateway": "2.0.0",
+    "@apollo/query-planner": "2.0.0",
     "@apollo/query-planner-1": "npm:@apollo/query-planner@0.10.1",
-    "@apollo/subgraph": "^2.0.5",
+    "@apollo/subgraph": "2.0.0",
     "@urql/core": "^2.6.0",
     "cli-progress": "^3.11.2",
     "clipanion": "^3.2.0-rc.11",
@@ -64,5 +64,11 @@
   "prettier": {
     "singleQuote": true,
     "trailingComma": "all"
+  },
+  "resolutions": {
+    "**/@apollo/composition": "2.0.0",
+    "**/@apollo/federation-internals": "2.0.0",
+    "**/@apollo/query-graphs": "2.0.0",
+    "**/@apollo/query-planner": "2.0.0"
   }
 }

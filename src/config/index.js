@@ -56,7 +56,7 @@ async function resolveSubgraph(client, subgraph) {
   } else if ('file' in subgraph.schema) {
     schema = await readFile(subgraph.schema.file, 'utf-8');
   } else {
-    const subgraphs = await getSubgraphSdls(client, subgraph.schema.graph_ref);
+    const subgraphs = await getSubgraphSdls(client, subgraph.schema.graphref);
     if (subgraphs[subgraph.schema.subgraph]) {
       schema = subgraphs[subgraph.schema.subgraph];
     } else {
@@ -82,13 +82,13 @@ export function createConfig(graphRef, subgraphs) {
         s.name,
         {
           routing_url: s.url,
-          schema: { graph_ref: graphRef, subgraph: s.name },
+          schema: { graphref: graphRef, subgraph: s.name },
         },
       ]),
     ),
 
     experimental_fed2readiness: {
-      graph_ref: graphRef,
+      graphref: graphRef,
     },
   };
 }

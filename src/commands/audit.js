@@ -373,7 +373,7 @@ export default class AuditCommand extends Command {
       this.accountId,
     );
 
-    spinner.text = `Fetching subgraphs for ${config.experimental_fed2readiness.graph_ref}`;
+    spinner.text = `Fetching subgraphs for ${config.experimental_fed2readiness.graphref}`;
     spinner.start();
 
     const resolvedConfig = await resolveConfig(client, config);
@@ -446,7 +446,7 @@ export default class AuditCommand extends Command {
 
     const operations = await getOperations(
       client,
-      config.experimental_fed2readiness.graph_ref,
+      config.experimental_fed2readiness.graphref,
       this.from,
     );
 
@@ -527,7 +527,7 @@ export default class AuditCommand extends Command {
           // eslint-disable-next-line no-await-in-loop
           await writeFile(
             path,
-            generateReport(result, config.experimental_fed2readiness.graph_ref),
+            generateReport(result, config.experimental_fed2readiness.graphref),
             'utf-8',
           );
         } else if (result.type === 'FAILURE') {
@@ -536,7 +536,7 @@ export default class AuditCommand extends Command {
             path,
             generateFailureReport(
               result,
-              config.experimental_fed2readiness.graph_ref,
+              config.experimental_fed2readiness.graphref,
             ),
             'utf-8',
           );

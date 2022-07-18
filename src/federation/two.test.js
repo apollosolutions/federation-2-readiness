@@ -47,11 +47,10 @@ test('query planning', async () => {
   });
 
   expect(result.schema).toBeDefined();
+  if (!result.schema) throw new Error();
 
-  const plan = await queryPlan(
-    /** @type {import("@apollo/federation-internals").Schema} */ (
-      result.schema
-    ),
+  const plan = queryPlan(
+    result.schema,
     `#graphql
     query Search($search: [String!]) {
       products(search: $search) {
