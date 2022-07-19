@@ -28,7 +28,7 @@
     "@apollo/gateway": "2.0.0",
     "@apollo/query-planner": "2.0.0",
     "@apollo/query-planner-1": "npm:@apollo/query-planner@0.10.1",
-    "@apollo/subgraph": "2.0.0",
+    "@apollo/subgraph": "2.0.5",
     "@urql/core": "^2.6.0",
     "cli-progress": "^3.11.2",
     "clipanion": "^3.2.0-rc.11",
