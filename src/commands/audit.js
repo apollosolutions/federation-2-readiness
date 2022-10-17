@@ -428,16 +428,16 @@ export default class AuditCommand extends Command {
       this.context.stdout.write(
         '💣 Could not load Federation v1 supergraph in @apollo/gateway v2\n',
       );
-      this.context.stdout.write(fed1Gateway.error.toString());
-      this.context.stdout.write('');
+      this.context.stdout.write(fed1Gateway.error.message);
+      this.context.stdout.write('\n');
     }
 
     if (!fed2Gateway.success) {
       this.context.stdout.write(
         '💣 Could not load Federation v2 supergraph in @apollo/gateway v2\n',
       );
-      this.context.stdout.write(fed2Gateway.error.toString());
-      this.context.stdout.write('');
+      this.context.stdout.write(fed2Gateway.error.message);
+      this.context.stdout.write('\n');
     }
 
     if (!fed1Gateway.success || !fed2Gateway.success) {
