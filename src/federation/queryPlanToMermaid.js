@@ -77,12 +77,28 @@ function process(currentNode) {
         endHash: nodeHash,
         nodeText: `
           ${nodeHash}("Flatten (${currentNode.path
-  .join(',')
-  .replaceAll('@', '[]')})")
-          
+          .join(',')
+          .replaceAll('@', '[]')})")
+
           ${processedChild.endHash} --> ${nodeHash}
           ${processedChild.nodeText}
         `,
+      };
+    }
+    case 'Condition': {
+      const nodeHash = hash();
+      return {
+        startHash: nodeHash,
+        endHash: nodeHash,
+        nodeText: `${nodeHash}("Condition")`,
+      };
+    }
+    case 'Defer': {
+      const nodeHash = hash();
+      return {
+        startHash: nodeHash,
+        endHash: nodeHash,
+        nodeText: `${nodeHash}("Defer")`,
       };
     }
     default:
@@ -99,7 +115,9 @@ function process(currentNode) {
 export function queryPlanToMermaid(context, queryName, queryPlan) {
   const queryPlanNode = queryPlan.node;
   if (!queryPlanNode) {
-    context.stdout.write(`Invalid query plan for ${queryName}. Will not generate a visual diagram.\n`);
+    context.stdout.write(
+      `Invalid query plan for ${queryName}. Will not generate a visual diagram.\n`,
+    );
     return '';
   }
 
@@ -109,7 +127,9 @@ export function queryPlanToMermaid(context, queryName, queryPlan) {
       ${process(queryPlanNode).nodeText}
   `.trim();
   } catch (e) {
-    context.stdout.write(`Error processing query plan for ${queryName}. Will not generate a visual diagram.\n`);
+    context.stdout.write(
+      `Error processing query plan for ${queryName}. Will not generate a visual diagram.\n`,
+    );
     return '';
   }
 }

@@ -55,7 +55,9 @@ export async function composeWithResolvedConfig(config) {
  */
 export function queryPlan(schema, operationDoc, operationName) {
   const documentNode = parse(operationDoc);
-  const operation = operationFromDocument(schema, documentNode, operationName);
+  const operation = operationFromDocument(schema, documentNode, {
+    operationName,
+  });
   const queryPlanner = new QueryPlanner(schema);
   return queryPlanner.buildQueryPlan(operation);
 }
@@ -72,7 +74,9 @@ export function queryPlanWithFed1Schema(
 ) {
   const documentNode = parse(operationDoc);
   const [schema] = buildSupergraphSchema(supergraphSdl);
-  const operation = operationFromDocument(schema, documentNode, operationName);
+  const operation = operationFromDocument(schema, documentNode, {
+    operationName,
+  });
   const queryPlanner = new QueryPlanner(schema);
   return queryPlanner.buildQueryPlan(operation);
 }

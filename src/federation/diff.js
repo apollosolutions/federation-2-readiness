@@ -21,3 +21,23 @@ export function diffQueryPlans(one, two) {
     diffs,
   };
 }
+
+/**
+ * @param {import("@apollo/query-planner").QueryPlan} one
+ * @param {import("@apollo/query-planner").QueryPlan} two
+ * @returns
+ */
+export function diffQueryPlansBothFed2(one, two) {
+  const oneString = serializeQueryPlan2(one);
+  const twoString = serializeQueryPlan2(two);
+
+  const diffs = diffLinesRaw(oneString.split('\n'), twoString.split('\n'));
+  const lines = diffs.length;
+  const differences = diffs.filter((diff) => diff[0] !== 0).length;
+
+  return {
+    lines,
+    differences,
+    diffs,
+  };
+}
