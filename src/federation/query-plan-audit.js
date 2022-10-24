@@ -1,6 +1,6 @@
 import { queryPlan as queryPlan1 } from './one.js';
 import { queryPlan as queryPlan2, queryPlanWithFed1Schema } from './two.js';
-import { diffQueryPlans } from './diff.js';
+import { diffQueryPlans, diffQueryPlansBothFed2 } from './diff.js';
 import { normalizeQueryPlan as normalizeQueryPlan1 } from './normalize-1.js';
 import { normalizeQueryPlan as normalizeQueryPlan2 } from './normalize-2.js';
 
@@ -112,7 +112,7 @@ export function queryPlanAudit({
         normalizedOne,
         normalizedTwo,
       );
-      const { differences: planner2BothSupergraphs } = diffQueryPlans(
+      const { differences: planner2BothSupergraphs } = diffQueryPlansBothFed2(
         normalizedTwoFromOne,
         normalizedTwo,
       );

@@ -190,7 +190,7 @@ function generateReport(result, graphRef) {
           '',
           '```diff',
           diff(
-            serializeQueryPlan1(result.normalizedTwoFromOne),
+            serializeQueryPlan2(result.normalizedTwoFromOne),
             serializeQueryPlan2(result.normalizedTwo),
             COLORS,
           ),
