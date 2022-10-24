@@ -66,9 +66,9 @@
     "trailingComma": "all"
   },
   "resolutions": {
-    "**/@apollo/composition": "2.0.0",
-    "**/@apollo/federation-internals": "2.0.0",
-    "**/@apollo/query-graphs": "2.0.0",
-    "**/@apollo/query-planner": "2.0.0"
+    "**/@apollo/composition": "2.1.3",
+    "**/@apollo/federation-internals": "2.1.3",
+    "**/@apollo/query-graphs": "2.1.3",
+    "**/@apollo/query-planner": "2.1.3"
   }
 }
