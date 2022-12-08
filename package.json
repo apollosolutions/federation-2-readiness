@@ -46,7 +46,7 @@
   "devDependencies": {
     "@graphql-codegen/cli": "^2.8.0",
     "@graphql-codegen/typed-document-node": "^2.3.1",
-    "@graphql-codegen/typescript": "^2.4.3",
+    "@graphql-codegen/typescript": "^2.8.5",
     "@graphql-codegen/typescript-operations": "^2.5.1",
     "@graphql-eslint/eslint-plugin": "^3.10.5",
     "@types/cli-progress": "^3.11.0",
