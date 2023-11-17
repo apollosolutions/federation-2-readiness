@@ -7,7 +7,7 @@ function hash() {
  * sharable package
  *
  * https://github.com/mdg-private/studio-ui/blob/f4341fd691794e68901b5122403b038749d15a82/src/app/graph/explorerPage/resultsPane/queryPlan/queryPlanToMermaid.ts#L137
- * @param {import("@apollo/query-planner-1").PlanNode|import("@apollo/query-planner").PlanNode} currentNode
+ * @param {import("@apollo/query-planner-1").PlanNode|import("@apollo/query-planner").PlanNode|import("@apollo/query-planner").SubscriptionNode} currentNode
  * @return {{nodeText: string, startHash: string, endHash: string}}
  */
 function process(currentNode) {
@@ -28,28 +28,27 @@ function process(currentNode) {
             return `
               ${link}
               ${processedChild.nodeText}
-            `;
+`;
           })
           .join(''),
       };
     }
     case 'Parallel': {
       const nodeHash = hash();
+      const children = currentNode.nodes.map((childNode) => {
+        const processedChild = process(childNode);
+        return `
+             ${nodeHash} --> ${processedChild.startHash}
+             ${processedChild.nodeText}
+`;
+      });
       return {
         startHash: nodeHash,
         endHash: nodeHash,
         nodeText: `
           ${nodeHash}("Parallel")
 
-          ${currentNode.nodes
-    .map((node) => {
-      const processedChild = process(node);
-      return `
-                ${nodeHash} --> ${processedChild.startHash}
-                ${processedChild.nodeText}
-              `;
-    })
-    .join('')}
+          ${children.join('')}
         `,
       };
     }
@@ -71,18 +70,17 @@ function process(currentNode) {
     case 'Flatten': {
       const nodeHash = hash();
       const processedChild = process(currentNode.node);
+      const nodePath = currentNode.path.join(',').replaceAll('@', '[]');
 
       return {
         startHash: processedChild.startHash,
         endHash: nodeHash,
         nodeText: `
-          ${nodeHash}("Flatten (${currentNode.path
-          .join(',')
-          .replaceAll('@', '[]')})")
+          ${nodeHash}("Flatten (${nodePath})")
 
           ${processedChild.endHash} --> ${nodeHash}
           ${processedChild.nodeText}
-        `,
+`,
       };
     }
     case 'Condition': {
@@ -99,6 +97,29 @@ function process(currentNode) {
         startHash: nodeHash,
         endHash: nodeHash,
         nodeText: `${nodeHash}("Defer")`,
+      };
+    }
+    case 'Subscription': {
+      const nodeHash = hash();
+      const processedPrimary = process(currentNode.primary);
+      const processedRest = currentNode.rest ? process(currentNode.rest) : null;
+      const restNodeText = processedRest
+        ? `
+          ${nodeHash} --> ("Rest ${processedRest.startHash}")
+          ${processedRest.nodeText}
+`
+        : '';
+
+      return {
+        startHash: nodeHash,
+        endHash: nodeHash,
+        nodeText: `
+          ${nodeHash}("Subscription")
+
+          ${nodeHash} --> ("Primary ${processedPrimary.startHash}")
+          ${processedPrimary.nodeText}
+          ${restNodeText}
+`,
       };
     }
     default:

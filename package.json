@@ -19,16 +19,16 @@
     "dev": "node bin/index.js",
     "dev:customer": "node bin/index.js audit --account <account-name>",
     "check:lint": "yarn eslint",
-    "check:tcs": "yarn tsc"
+    "check:tsc": "yarn tsc"
   },
   "dependencies": {
-    "@apollo/composition": "^2.2.1",
+    "@apollo/composition": "^2.5.7",
     "@apollo/federation-1": "npm:@apollo/federation@0.37.1",
-    "@apollo/federation-internals": "^2.2.1",
-    "@apollo/gateway": "^2.2.1",
-    "@apollo/query-planner": "^2.2.1",
+    "@apollo/federation-internals": "^2.5.7",
+    "@apollo/gateway": "^2.5.7",
+    "@apollo/query-planner": "^2.5.7",
     "@apollo/query-planner-1": "npm:@apollo/query-planner@0.11.1",
-    "@apollo/subgraph": "^2.2.1",
+    "@apollo/subgraph": "^2.5.7",
     "@urql/core": "^2.6.0",
     "cli-progress": "^3.11.2",
     "clipanion": "^3.2.0-rc.11",
