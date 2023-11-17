@@ -1,10 +1,10 @@
 import { compose } from '@apollo/composition';
 import {
   buildSubgraph,
-  buildSupergraphSchema,
   errorCauses,
   operationFromDocument,
   Subgraphs,
+  Supergraph,
 } from '@apollo/federation-internals';
 import { QueryPlanner } from '@apollo/query-planner';
 import { GraphQLError, parse } from 'graphql';
@@ -58,7 +58,8 @@ export function queryPlan(schema, operationDoc, operationName) {
   const operation = operationFromDocument(schema, documentNode, {
     operationName,
   });
-  const queryPlanner = new QueryPlanner(schema);
+  const supergraph = new Supergraph(schema, null, false);
+  const queryPlanner = new QueryPlanner(supergraph);
   return queryPlanner.buildQueryPlan(operation);
 }
 
@@ -73,10 +74,12 @@ export function queryPlanWithFed1Schema(
   operationName,
 ) {
   const documentNode = parse(operationDoc);
-  const [schema] = buildSupergraphSchema(supergraphSdl);
-  const operation = operationFromDocument(schema, documentNode, {
+  const supergraph = Supergraph.build(supergraphSdl, {
+    validateSupergraph: true,
+  });
+  const operation = operationFromDocument(supergraph.schema, documentNode, {
     operationName,
   });
-  const queryPlanner = new QueryPlanner(schema);
+  const queryPlanner = new QueryPlanner(supergraph);
   return queryPlanner.buildQueryPlan(operation);
 }

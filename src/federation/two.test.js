@@ -72,11 +72,13 @@ Object {
     "nodes": Array [
       Object {
         "id": undefined,
+        "inputRewrites": undefined,
         "kind": "Fetch",
         "operation": "query Search__products__0($search:[String!]){products(search:$search){__typename id name}}",
         "operationDocumentNode": undefined,
         "operationKind": "query",
         "operationName": "Search__products__0",
+        "outputRewrites": undefined,
         "requires": undefined,
         "serviceName": "products",
         "variableUsages": Array [
@@ -87,11 +89,13 @@ Object {
         "kind": "Flatten",
         "node": Object {
           "id": undefined,
+          "inputRewrites": undefined,
           "kind": "Fetch",
           "operation": "query Search__reviews__1($representations:[_Any!]!){_entities(representations:$representations){...on Product{reviews{rating}}}}",
           "operationDocumentNode": undefined,
           "operationKind": "query",
           "operationName": "Search__reviews__1",
+          "outputRewrites": undefined,
           "requires": Array [
             Object {
               "kind": "InlineFragment",
