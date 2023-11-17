@@ -19,7 +19,7 @@
     "dev": "node bin/index.js",
     "dev:customer": "node bin/index.js audit --account <account-name>",
     "check:lint": "yarn eslint",
-    "check:tcs": "yarn tsc"
+    "check:tsc": "yarn tsc"
   },
   "dependencies": {
     "@apollo/composition": "^2.5.7",

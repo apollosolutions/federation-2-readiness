@@ -4,6 +4,7 @@ import { parse, print, visit } from 'graphql';
  * @typedef {import('@apollo/query-planner').QueryPlanSelectionNode} QueryPlanSelectionNode
  * @typedef {import('@apollo/query-planner').QueryPlan} QueryPlan
  * @typedef {import('@apollo/query-planner').PlanNode} PlanNode
+ * @typedef {import('@apollo/query-planner').SubscriptionNode} SubscriptionNode
  * @typedef {import('../typings').QueryPlanVisitor2} QueryPlanVisitor
  */
 
@@ -14,7 +15,7 @@ import { parse, print, visit } from 'graphql';
 function visitQueryPlan(plan, visitor) {
   const newPlan = { ...plan };
   /**
-   * @param {PlanNode} node
+   * @param {PlanNode | SubscriptionNode} node
    */
   function recurse(node) {
     const newNode = { ...node };
