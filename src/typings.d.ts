@@ -3,6 +3,8 @@ import {
   FlattenNode,
   ParallelNode,
   SequenceNode,
+  ConditionNode,
+  DeferNode,
 } from '@apollo/query-planner';
 import {
   FetchNode1,
@@ -55,6 +57,8 @@ interface QueryPlanVisitor2 {
   Flatten?: (node: FlattenNode) => FlattenNode | undefined;
   Parallel?: (node: ParallelNode) => ParallelNode | undefined;
   Sequence?: (node: SequenceNode) => SequenceNode | undefined;
+  Condition?: (node: ConditionNode) => ConditionNode | undefined;
+  Defer?: (node: DeferNode) => DeferNode | undefined;
 }
 
 interface QueryPlanVisitor1 {
