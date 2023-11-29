@@ -63,8 +63,26 @@ function visitQueryPlan(plan, visitor) {
 
         newNode.nodes = newNode.nodes.map((child) => recurse(child));
         break;
+      case 'Condition':
+        if (visitor.Condition) {
+          const result = visitor.Condition(newNode);
+          if (result !== undefined) {
+            newNode.condition = result.condition;
+            newNode.ifClause = result.ifClause;
+            newNode.elseClause = result.elseClause;
+          }
+        }
+        break;
+      case 'Defer':
+        if (visitor.Defer) {
+          const result = visitor.Defer(newNode);
+          if (result !== undefined) {
+            newNode.deferred = result.deferred;
+          }
+        }
+        break;
       default:
-        throw new Error('invalid node kind');
+        throw new Error(`Invalid query plan node kind: ${newNode?.kind}. This tool may need to update its Federation version. Please reach out to Apollo`);
     }
 
     return newNode;

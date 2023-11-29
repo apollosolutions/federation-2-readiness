@@ -18,7 +18,8 @@ function visitQueryPlan(plan, visitor) {
    */
   function recurse(node) {
     const newNode = { ...node };
-    switch (newNode?.kind) {
+    const nodeKind = newNode?.kind;
+    switch (nodeKind) {
       case 'Fetch':
         if (visitor.Fetch) {
           const result = visitor.Fetch(newNode);
@@ -63,7 +64,7 @@ function visitQueryPlan(plan, visitor) {
         newNode.nodes = newNode.nodes.map((child) => recurse(child));
         break;
       default:
-        throw new Error('invalid node kind');
+        throw new Error(`Invalid query plan node kind: ${nodeKind}. This tool may need to update its Federation version. Please reach out to Apollo`);
     }
 
     return newNode;
