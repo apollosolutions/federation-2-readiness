@@ -17,7 +17,7 @@
     "test": "node --experimental-vm-modules $(yarn bin)/jest src",
     "test:debug": "node --inspect-brk --experimental-vm-modules $(yarn bin)/jest src",
     "dev": "node bin/index.js",
-    "dev:customer": "node bin/index.js audit --account chegg",
+    "dev:customer": "node bin/index.js audit --account <account-name>",
     "check:lint": "yarn eslint",
     "check:tsc": "yarn tsc"
   },
