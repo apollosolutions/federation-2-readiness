@@ -1,0 +1,5 @@
+name: federation-2-readiness
+description: A CLI tool to check your federated schema for backward
+  compatibility with Federation 2 and audit query plans.
+tags:
+  - Federation
